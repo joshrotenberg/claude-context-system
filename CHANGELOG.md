@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/joshrotenberg/claude-context-system/compare/claude-context-system-v0.1.3...claude-context-system-v0.1.4) (2025-07-18)
+
+
+### Features
+
+* comprehensive improvements based on real-world feedback ([#9](https://github.com/joshrotenberg/claude-context-system/issues/9)) ([0655c00](https://github.com/joshrotenberg/claude-context-system/commit/0655c00ed91f08adf79f47e2bc9d37c1ae10bf94))
+
 ## [0.1.3](https://github.com/joshrotenberg/claude-context-system/compare/claude-context-system-v0.1.2...claude-context-system-v0.1.3) (2025-07-18)
 
 
