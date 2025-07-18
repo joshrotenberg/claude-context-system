@@ -2,6 +2,43 @@
 
 **A self-contained, AI-managed system for maintaining project context and architectural decisions. You focus on coding, your AI assistant handles the rest.**
 
+## 🚀 AI Assistant Quick Start
+
+**If you're an AI assistant getting oriented on this project for the first time, follow this sequence:**
+
+### 0. Check Current Date First
+**IMPORTANT**: Always check the current date before proceeding. Use your date/time tool to get accurate timestamps for any work.
+
+### 1. Essential Context (Read First)
+- **Current Status**: v1.0 public release ready after 2+ years of development
+- **Project Purpose**: Self-contained system for AI-managed architectural decision tracking
+- **Key Innovation**: Single-file distribution with zero setup friction
+- **Live Demo**: This repository dogfoods its own system in `.claude/` directory
+
+### 2. Rapid Orientation Checklist
+1. **Read the ADR Index**: `.claude/adr-index.toml` - shows current decisions and project metadata
+2. **Check Recent ADRs**: Look in `.claude/branches/feat/` for latest feature decisions
+3. **Understand Architecture**: Read `.claude/branches/arch/single-file-approach.md` 
+4. **Review Permissions**: Check `.claude/branches/docs/team-permission-model.md`
+5. **Current Branch Structure**: Use `git branch -a` to see active development
+
+### 3. Key Files for Context
+- **`.claude/adr-index.toml`** - Project metadata, permissions, active ADRs
+- **`.claude/branches/*/`** - All architectural decisions organized by type
+- **`README.md`** - Public-facing overview and quick start
+- **This file** - Complete system specification and setup guide
+
+### 4. Current Development Phase
+- **Status**: Post-v1.0 public release
+- **Active Work**: Optimizing AI assistant onboarding and user experience
+- **Permission Model**: Three-tier system (never/ask/yes) for team safety
+- **Distribution**: Raw GitHub content (no longer using Gist)
+- **Date Awareness**: Always verify current date before creating timestamps or ADRs
+
+**Quick Command**: To see all recent decisions: `find .claude/branches -name "*.md" -exec basename {} \; | sort`
+
+**Speed Test**: To measure and validate context ingestion efficiency: `./scripts/context-speed-test.sh`
+
 ## 🎯 The Promise: AI Does the Work, You Stay Focused
 
 **For Developers:**
@@ -286,8 +323,19 @@ Proposed → Accepted → Implemented → (Superseded/Archived)
 ├── adr-helper.sh                # Management and automation scripts
 ├── branches/                    # Active ADRs by category
 │   ├── feat/                    # Feature decisions
+│   │   ├── simple-feature.md      # Simple pattern
+│   │   ├── auth/                   # Component pattern
+│   │   │   ├── oauth-integration.md
+│   │   │   └── session-management.md
+│   │   └── api/
+│   │       └── rate-limiting.md
 │   ├── docs/                    # Documentation decisions
 │   ├── chore/                   # Process/tooling decisions
+│   │   ├── build-optimization.md  # Simple pattern
+│   │   ├── docs/                   # Component pattern
+│   │   │   └── readme-restructure.md
+│   │   └── ci/
+│   │       └── github-actions.md
 │   └── arch/                    # Architecture decisions
 ├── merged/                      # Completed/finalized ADRs
 ├── templates/                   # ADR templates
@@ -296,6 +344,31 @@ Proposed → Accepted → Implemented → (Superseded/Archived)
 ```
 
 ## Document Types and Organization
+
+### Conventional Branching Support
+
+The system supports both **simple** and **component-based** ADR organization to match your team's conventional commit and branching patterns:
+
+**Simple Pattern:**
+```bash
+./adr-helper.sh new feat "user-authentication"
+# Creates: .claude/branches/feat/user-authentication.md
+```
+
+**Component Pattern (matches conventional commits):**
+```bash
+./adr-helper.sh new feat/auth "oauth-integration"
+# Creates: .claude/branches/feat/auth/oauth-integration.md
+
+./adr-helper.sh new "chore(docs)" "readme-update"  
+# Creates: .claude/branches/chore/docs/readme-update.md
+```
+
+**Benefits:**
+- ✅ **Team Alignment**: Matches existing conventional commit/branch workflows
+- ✅ **Better Organization**: Component-level grouping within decision types
+- ✅ **Backward Compatible**: Existing simple pattern continues to work
+- ✅ **Flexible Adoption**: Teams choose their preferred convention style
 
 ### Core ADR System (Root Level)
 - `CLAUDE-CONTEXT-SYSTEM.md` - Complete system guide and setup
