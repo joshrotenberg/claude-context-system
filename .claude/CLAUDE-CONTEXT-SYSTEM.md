@@ -27,7 +27,7 @@
 
 This document is maintained in the above repository as the **canonical reference**. You should periodically check for updates and implement them as appropriate for your project.
 
-**Single-file distribution**: Available at https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc
+**Single-file distribution**: Available at https://raw.githubusercontent.com/joshrotenberg/claude-context-system/main/CLAUDE-CONTEXT-SYSTEM.md
 
 ### Automated Update Checking
 
@@ -1370,7 +1370,7 @@ May I proceed with: git add .claude/branches/feat/new-feature.md && git commit -
 
 When asked to check for updates:
 1. Check user's authorization for git operations first
-2. Fetch the canonical gist: https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc
+2. Fetch the canonical repository: https://raw.githubusercontent.com/joshrotenberg/claude-context-system/main/CLAUDE-CONTEXT-SYSTEM.md
 3. Compare with local `.claude/CLAUDE-CONTEXT-SYSTEM.md`
 4. Identify new features, improvements, or fixes
 5. Present summary of changes with benefits/impact
