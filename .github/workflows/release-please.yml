@@ -1,0 +1,51 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      # Optional: Run additional steps when a release is created
+      - name: Checkout code
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+
+      - name: Install just
+        if: ${{ steps.release.outputs.release_created }}
+        uses: extractions/setup-just@v2
+
+      - name: Run release validation
+        if: ${{ steps.release.outputs.release_created }}
+        run: just release-check
+
+      - name: Create release artifacts
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          echo "🎉 Release ${{ steps.release.outputs.tag_name }} created!"
+          echo "📦 Version: ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}"
+          just dist
+
+      - name: Upload release artifacts
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts-${{ steps.release.outputs.tag_name }}
+          path: |
+            dist/
+            CHANGELOG.md
+          retention-days: 90

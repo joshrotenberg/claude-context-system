@@ -1,0 +1,55 @@
+# Build artifacts and distribution packages
+dist/
+
+# Node modules (if any)
+node_modules/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+.temp/
+tmp/
+
+# Logs
+*.log
+logs/
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Package manager lock files (for future use)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Release artifacts
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+
+# Test artifacts
+test-results/
+.bats-tmp/

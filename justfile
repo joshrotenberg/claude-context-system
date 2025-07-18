@@ -6,7 +6,7 @@ default:
     @just --list
 
 # Variables
-version := `grep -o "v[0-9]\+\.[0-9]\+\.[0-9]\+" CLAUDE-CONTEXT-SYSTEM.md | head -1 || echo "v0.0.0"`
+version := `cat .release-please-manifest.json 2>/dev/null | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+" | head -1 || echo "0.1.0"`
 project_name := "claude-context-system"
 
 # Show help with current version
@@ -152,6 +152,8 @@ release-check:
         exit 1; \
     fi
     @echo "✅ Release readiness validated"
+
+
 
 # Create and push version tag
 tag: release-check
