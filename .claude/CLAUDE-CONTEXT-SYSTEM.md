@@ -33,6 +33,8 @@
 
 **Quick Command**: To see all recent decisions: `find .claude/branches -name "*.md" -exec basename {} \; | sort`
 
+**Speed Test**: To measure and validate context ingestion efficiency: `./scripts/context-speed-test.sh`
+
 ## 🎯 The Promise: AI Does the Work, You Stay Focused
 
 **For Developers:**
