@@ -81,11 +81,20 @@ lint_shell_scripts() {
     local script_count=0
     local lint_errors=0
 
+    # Debug: Show environment info
+    log_info "DEBUG: PROJECT_ROOT=$PROJECT_ROOT"
+    log_info "DEBUG: PWD=$(pwd)"
+    log_info "DEBUG: shellcheck version: $(shellcheck --version 2>/dev/null | head -1 || echo 'not available')"
+
     # Find all shell scripts
     local scripts=()
+    log_info "DEBUG: Searching for shell scripts..."
     while IFS= read -r -d '' script; do
+        log_info "DEBUG: Found script: $script"
         scripts+=("$script")
     done < <(find "$PROJECT_ROOT" -name "*.sh" -type f -print0)
+
+    log_info "DEBUG: Total scripts found: ${#scripts[@]}"
 
     if [ ${#scripts[@]} -eq 0 ]; then
         log_warning "No shell scripts found to lint"
@@ -95,11 +104,16 @@ lint_shell_scripts() {
     for script in "${scripts[@]}"; do
         ((script_count++))
         log_info "Checking $(basename "$script")..."
+        log_info "DEBUG: Full path: $script"
+        log_info "DEBUG: File exists: $([ -f "$script" ] && echo 'yes' || echo 'no')"
+        log_info "DEBUG: File readable: $([ -r "$script" ] && echo 'yes' || echo 'no')"
 
         if command -v shellcheck >/dev/null 2>&1; then
+            log_info "DEBUG: Running shellcheck on $script"
             if ! shellcheck --exclude=SC2155,SC2034,SC2004 "$script"; then
                 ((lint_errors++))
                 log_error "Lint errors in $script"
+                log_error "DEBUG: shellcheck exit code: $?"
             else
                 log_success "$(basename "$script") passed lint"
             fi
@@ -107,6 +121,8 @@ lint_shell_scripts() {
             log_warning "shellcheck not available, skipping lint for $script"
         fi
     done
+
+    log_info "DEBUG: Final counts - script_count=$script_count, lint_errors=$lint_errors"
 
     if [ $lint_errors -eq 0 ]; then
         log_success "All $script_count shell scripts passed lint checks"
