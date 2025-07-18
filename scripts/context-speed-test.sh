@@ -8,7 +8,7 @@ set -e
 CLAUDE_DIR=".claude"
 RESULTS_DIR="test-results"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-TEST_SESSION_FILE="$RESULTS_DIR/session_$TIMESTAMP.json"
+# TEST_SESSION_FILE="$RESULTS_DIR/session_$TIMESTAMP.json"  # Unused for now
 
 # Colors for output
 RED='\033[0;31m'
@@ -79,7 +79,7 @@ setup_test_environment() {
     "test_framework": "context-ingestion-speed",
     "version": "1.0",
     "created": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-    "project_name": "$(basename $(pwd))",
+    "project_name": "$(basename "$(pwd)")",
     "question_count": ${#CONTEXT_QUESTIONS[@]},
     "test_scenarios": [
         "baseline",
@@ -113,7 +113,8 @@ run_baseline_test() {
     echo ""
 
     # Record test start
-    local start_time=$(date +%s)
+    local start_time
+    start_time=$(date +%s)
     local test_file="$RESULTS_DIR/baseline_$TIMESTAMP.json"
 
     cat > "$test_file" <<EOF
@@ -150,7 +151,8 @@ EOF
     echo -e "${YELLOW}Timer started. Press ENTER when AI has finished context ingestion...${NC}"
     read -r
 
-    local end_time=$(date +%s)
+    local end_time
+    end_time=$(date +%s)
     local duration=$((end_time - start_time))
 
     # Update test results
@@ -190,7 +192,8 @@ run_guided_test() {
     echo "Simulates an AI assistant using our optimized onboarding"
     echo ""
 
-    local start_time=$(date +%s)
+    local start_time
+    start_time=$(date +%s)
     local test_file="$RESULTS_DIR/guided_$TIMESTAMP.json"
 
     cat > "$test_file" <<EOF
@@ -218,7 +221,8 @@ EOF
     echo -e "${YELLOW}Timer started. Press ENTER when AI has finished context ingestion...${NC}"
     read -r
 
-    local end_time=$(date +%s)
+    local end_time
+    end_time=$(date +%s)
     local duration=$((end_time - start_time))
 
     # Update test results
@@ -256,8 +260,10 @@ compare_results() {
     echo ""
 
     # Find most recent test results
-    local latest_baseline=$(ls -t "$RESULTS_DIR"/baseline_*.json 2>/dev/null | head -1)
-    local latest_guided=$(ls -t "$RESULTS_DIR"/guided_*.json 2>/dev/null | head -1)
+    local latest_baseline
+    local latest_guided
+    latest_baseline=$(find "$RESULTS_DIR" -name "baseline_*.json" -type f 2>/dev/null | head -1)
+    latest_guided=$(find "$RESULTS_DIR" -name "guided_*.json" -type f 2>/dev/null | head -1)
 
     if [[ -z "$latest_baseline" ]] || [[ -z "$latest_guided" ]]; then
         echo -e "${RED}Error: Need both baseline and guided test results${NC}"
@@ -266,12 +272,16 @@ compare_results() {
     fi
 
     # Extract durations
-    local baseline_duration=$(jq -r '.duration_minutes' "$latest_baseline")
-    local guided_duration=$(jq -r '.duration_minutes' "$latest_guided")
+    local baseline_duration
+    local guided_duration
+    baseline_duration=$(jq -r '.duration_minutes' "$latest_baseline")
+    guided_duration=$(jq -r '.duration_minutes' "$latest_guided")
 
     # Calculate improvement
-    local improvement=$(echo "scale=1; (($baseline_duration - $guided_duration) / $baseline_duration) * 100" | bc -l)
-    local time_saved=$(echo "scale=1; $baseline_duration - $guided_duration" | bc -l)
+    local improvement
+    local time_saved
+    improvement=$(echo "scale=1; (($baseline_duration - $guided_duration) / $baseline_duration) * 100" | bc -l)
+    time_saved=$(echo "scale=1; $baseline_duration - $guided_duration" | bc -l)
 
     echo "Performance Comparison:"
     echo "======================"
@@ -295,7 +305,7 @@ compare_results() {
 # Context Ingestion Speed Test Results
 
 **Test Date**: $(date)
-**Project**: $(basename $(pwd))
+**Project**: $(basename "$(pwd)")
 
 ## Results Summary
 
@@ -353,11 +363,15 @@ show_results() {
     fi
 
     echo "Test Files:"
-    ls -la "$RESULTS_DIR"/*.json 2>/dev/null | awk '{print "  " $9 " (" $6 " " $7 " " $8 ")"}'
+    find "$RESULTS_DIR" -name "*.json" -type f 2>/dev/null | while read -r file; do
+        echo "  $(basename "$file")"
+    done
 
     echo ""
     echo "Reports:"
-    ls -la "$RESULTS_DIR"/*.md 2>/dev/null | awk '{print "  " $9 " (" $6 " " $7 " " $8 ")"}'
+    find "$RESULTS_DIR" -name "*.md" -type f 2>/dev/null | while read -r file; do
+        echo "  $(basename "$file")"
+    done
 }
 
 cleanup_tests() {
