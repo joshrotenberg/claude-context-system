@@ -64,7 +64,7 @@ backup_system() {
 
 # Restore from most recent backup
 restore_system() {
-    local latest_backup=$(ls -t .claude/backups/system-backup-*.tar.gz 2>/dev/null | head -1)
+    local latest_backup=$(find .claude/backups -name "system-backup-*.tar.gz" -type f 2>/dev/null | sort -r | head -1)
     if [[ -n "$latest_backup" ]]; then
         echo -e "${YELLOW}🔄 Restoring from backup: $latest_backup${NC}"
         local temp_dir=$(mktemp -d)
@@ -220,7 +220,7 @@ EOF
     else
         echo -e "${RED}ERROR: TOML validation failed after update. Restoring backup.${NC}"
         # Restore from backup if validation fails
-        local latest_backup=$(ls -t "$CLAUDE_DIR/backups/adr-index.toml.backup."* 2>/dev/null | head -1)
+        local latest_backup=$(find "$CLAUDE_DIR/backups" -name "adr-index.toml.backup.*" -type f 2>/dev/null | sort -r | head -1)
         if [[ -n "$latest_backup" ]]; then
             cp "$latest_backup" "$INDEX_FILE"
             echo -e "${YELLOW}Restored from backup: $latest_backup${NC}"

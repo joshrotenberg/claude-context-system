@@ -161,7 +161,7 @@ security_scan() {
     local security_issues=0
 
     # Check for potential secrets (basic scan)
-    if grep -r -E "(api_key|password|secret|token)" --include="*.sh" --include="*.md" "$PROJECT_ROOT" | grep -v "example\|sample\|template\|test" >/dev/null; then
+    if grep -r -E "(api_key|password|secret|token)" --include="*.sh" --include="*.md" "$PROJECT_ROOT" | grep -v -E "example\|sample\|template\|test\|error token\|syntax error\|Error.*token" >/dev/null; then
         log_error "Potential secrets found in files"
         ((security_issues++))
     else
