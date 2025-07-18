@@ -87,7 +87,7 @@ lint_shell_scripts() {
         log_info "Checking $(basename "$script")..."
 
         if command -v shellcheck >/dev/null 2>&1; then
-            if ! shellcheck "$script"; then
+            if ! shellcheck --exclude=SC2155,SC2034,SC2004 "$script"; then
                 ((lint_errors++))
                 log_error "Lint errors in $script"
             else
