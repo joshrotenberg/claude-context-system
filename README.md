@@ -84,7 +84,33 @@ This repository uses the Claude Context System to manage its own development! Ex
 
 This project practices what it preaches - all development decisions are captured as ADRs in `.claude/branches/`. 
 
+**Development setup:**
+```bash
+# Install just command runner (if needed)
+cargo install just
+
+# Quick start
+just setup    # Install dependencies
+just dev      # Setup + quick test
+just test     # Full test suite
+```
+
 Want to contribute? Create an issue or PR. We'll document the decision process using our own system!
+
+## 🛠️ Development
+
+**For contributors and advanced users:**
+
+```bash
+# Available commands (use `just` command runner)
+just           # Show all available commands
+just test      # Run full test suite
+just lint      # Code quality checks
+just security  # Security scan
+just demo      # System demonstration
+```
+
+**Full development guide:** See `DEVELOPMENT.md`
 
 ## 📋 Version
 
