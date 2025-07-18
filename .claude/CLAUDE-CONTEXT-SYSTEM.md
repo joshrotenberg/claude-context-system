@@ -1905,6 +1905,179 @@ This isn't a tool - it's a pattern. No installation, no dependencies, no learnin
 - **Per architectural review**: Save 4-8 hours
 - **Break-even**: After just 2-3 decisions
 
+## 🌿 Branch-Based TODO Workflow
+
+**Transform your TODO list into a context-rich, git-integrated workflow**
+
+### The Problem with Traditional TODOs
+
+Traditional TODO lists become stale and lose context. When you return to a task days or weeks later, you face:
+- Lost mental context about why the task matters
+- Scattered information across different tools
+- Significant ramp-up time to resume work
+- No preserved working state or partial progress
+
+### The Branch-Based Solution
+
+**Core Principle**: Each TODO item becomes a git branch with full context preserved.
+
+### 1. Capture Phase
+```bash
+# When you think "I should work on user authentication"
+git checkout -b feat/user-authentication
+
+# When you notice "That memory leak needs fixing"  
+git checkout -b fix/memory-leak-in-parser
+
+# When you want to "Document the API better"
+git checkout -b docs/api-endpoint-guide
+```
+
+**Key**: Create branches immediately when ideas arise, don't wait until you're ready to work.
+
+### 2. Context Preservation
+```bash
+# Switch to your branch
+git checkout feat/user-authentication
+
+# Create initial context commit
+echo "# User Authentication Implementation
+
+## Context
+- Current auth is basic HTTP basic auth
+- Need OAuth2 for enterprise customers
+- Security team requires PKCE flow
+
+## Research Done
+- Evaluated Auth0, Okta, custom solution
+- Auth0 chosen for ease of integration
+
+## Next Steps
+- [ ] Set up Auth0 tenant
+- [ ] Configure PKCE flow
+- [ ] Update user model
+- [ ] Add login/logout endpoints
+
+## References
+- Security requirements: #issue-123
+- Architecture decision: .claude/branches/arch/oauth-decision.md
+" > BRANCH_NOTES.md
+
+git add BRANCH_NOTES.md
+git commit -m "feat: initial context for user authentication
+
+- Document current state and requirements
+- Research findings and tool selection
+- Outline implementation steps
+- Link related issues and decisions"
+```
+
+### 3. Visual TODO Management
+```bash
+# Your TODO list is now:
+git branch
+#   main
+# * feat/user-authentication
+#   fix/memory-leak-in-parser
+#   docs/api-endpoint-guide
+#   chore/update-dependencies
+```
+
+**Benefits:**
+- **Instant visibility**: `git branch` shows all current work
+- **Context switching**: `git checkout [task]` loads full context
+- **Progress tracking**: Commit history shows evolution
+- **Collaboration**: Team sees what you're working on
+
+### 4. Resuming Work (Zero Context Loss)
+```bash
+# Two weeks later...
+git checkout feat/user-authentication
+cat BRANCH_NOTES.md  # Instant context reload
+git log --oneline     # See progress made
+```
+
+No mental overhead. No "what was I doing?" moments.
+
+### 5. Maintenance & Cleanup
+```bash
+# Weekly cleanup
+git branch --merged     # See completed work
+git branch -d feat/user-authentication  # Clean up merged branches
+
+# Archive long-term ideas
+git checkout -b ideas/machine-learning-integration
+# (document idea, then leave dormant)
+```
+
+### Integration with Claude Context System
+
+This workflow pairs perfectly with the Claude Context System:
+
+```bash
+# Create ADR for architectural decisions within your branch
+./.claude/adr-helper.sh new arch "oauth-provider-selection"
+
+# The ADR becomes part of your branch context
+# When you merge, both the implementation AND the decision reasoning are preserved
+```
+
+### Best Practices
+
+**Branch Naming**: Use conventional commit prefixes
+- `feat/` - New features
+- `fix/` - Bug fixes  
+- `docs/` - Documentation
+- `chore/` - Maintenance
+- `experiment/` - Exploratory work
+
+**Initial Commits**: Always make a context commit with:
+- Why this work is needed
+- Current understanding/research
+- Next steps or plan
+- Relevant links/references
+
+**Regular Reviews**: Weekly branch cleanup to avoid clutter
+- Merge completed work
+- Delete abandoned experiments
+- Archive long-term ideas
+
+**Team Integration**: 
+- Branch names communicate work focus
+- `BRANCH_NOTES.md` provides context for reviewers
+- ADRs document decisions made during development
+
+### Example Workflow in Action
+
+```bash
+# Monday morning: Capture weekend ideas
+git checkout -b feat/dark-mode-toggle
+git checkout -b fix/mobile-responsive-header  
+git checkout -b docs/deployment-guide
+
+# Pick one to work on
+git checkout feat/dark-mode-toggle
+
+# Create context
+echo "Users requesting dark mode since Q2..." > BRANCH_NOTES.md
+git commit -am "feat: capture dark mode requirements and research"
+
+# Work for 2 hours, make progress
+git commit -am "feat: add CSS variables for color theming"
+
+# Switch context (meeting about mobile issues)
+git checkout fix/mobile-responsive-header
+cat BRANCH_NOTES.md  # Instant context about mobile problems
+
+# Friday: Review what got done
+git branch --merged
+git branch  # See what's still pending
+```
+
+**Result**: Your TODO list is now a living, context-rich system that grows with your work and preserves all progress.
+
+See ADR: `.claude/branches/docs/branch-based-todo-workflow.md` for the complete architectural decision behind this approach.
+
 ## Team Workflow Integration
 
 ### 1. Development Workflow
