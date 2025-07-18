@@ -2,35 +2,82 @@
 
 **A self-contained system for maintaining project context, architectural decisions, and AI assistant continuity.**
 
+## Why Your Team Needs This (2-Minute Pitch)
+
+### The Problem We're Solving
+- **"Why did we choose X?"** - Asked 6 months later, nobody remembers
+- **"What did the last person try?"** - Context lost when team members change
+- **"What should our AI assistant know?"** - Inconsistent recommendations across sessions
+- **Technical debt from undocumented decisions** - Costs compound over time
+
+### The Solution: Architectural Decision Records (ADRs)
+A lightweight system that:
+- Takes 5 minutes to set up
+- Requires ~10 minutes per major decision
+- Saves hours of confusion and rework
+- Makes AI assistants 10x more helpful
+
+### Real ROI Example
+**Without ADRs:** 2 hours finding why Redis was chosen over Postgres  
+**With ADRs:** 2 minutes reading `cache-technology-decision.md`  
+**Break-even:** After just 3-4 "why did we..." questions
+
 ## Quick Setup (Copy → Paste → Done)
 
 ### 1. Create the Directory Structure
+
 ```bash
 mkdir -p .claude/{branches/{feat,docs,chore,arch},merged,templates}
 ```
 
 ### 2. Copy This File
+
 Save this file as `.claude/CLAUDE-CONTEXT-SYSTEM.md` in your project root.
 
 ### 3. Tell Claude
+
 "Please read `.claude/CLAUDE-CONTEXT-SYSTEM.md` and set up the complete system for our project."
 
 That's it! Claude will create all the files, templates, and scripts needed.
 
+## Quick Reference Card
+
+### Essential Commands
+```bash
+# Daily workflow
+./adr-helper.sh status          # Check system health
+./adr-helper.sh list            # See active decisions
+./adr-helper.sh new feat "name" # Create new ADR
+
+# Maintenance
+./adr-helper.sh validate        # Verify integrity
+find .claude -name "*.md"       # Find all ADRs
+grep -r "Status: Proposed"      # Find pending decisions
+```
+
+### ADR Lifecycle
+```
+Proposed → Accepted → Implemented → (Superseded/Archived)
+         ↘ Rejected → Archived
+```
+
 ## What This System Provides
 
 ### For Engineering Teams
+
 - **Decision History**: Why did we choose technology X over Y?
 - **Context Preservation**: New team members understand project evolution
 - **Reduced Cognitive Load**: No more "I forgot why we made this choice"
-- **AI Assistant Continuity**: Consistent help across different sessions/people
+- **AI Assistant Continuity**: Consistent help across different sessions
 
 ### For AI Assistants
+
 - **Rich Context**: Understand project history and current state
 - **Consistent Recommendations**: Decisions align with previous reasoning
 - **Faster Onboarding**: Get up to speed quickly on complex projects
 
 ## File Structure
+
 ```
 .claude/
 ├── CLAUDE-CONTEXT-SYSTEM.md    # This file (setup + guide)
@@ -82,6 +129,7 @@ Links to relevant discussions, RFCs, documentation
 ## System Setup Scripts
 
 ### ADR Helper Script (adr-helper.sh)
+
 ```bash
 #!/bin/bash
 # ADR Helper Script
@@ -227,6 +275,7 @@ esac
 ```
 
 ### Quick Management Commands
+
 ```bash
 # Validate ADR system
 ./.claude/adr-helper.sh validate
@@ -242,6 +291,7 @@ esac
 ```
 
 ## Sample ADR Index (adr-index.toml)
+
 ```toml
 # ADR Index for [PROJECT_NAME]
 
@@ -301,36 +351,51 @@ design = ["api-design"]
 ## AI Assistant Integration
 
 ### For Claude/AI Assistants
+
 When working with this project:
+- **Always read the ADR index first** to understand current decisions
+- **Reference specific ADRs** when making recommendations
+- **Suggest new ADRs** when major decisions are needed
+- **Update ADRs** when decisions change or evolve
+- **Maintain consistency** with existing architectural choices
 
-1. **Always read the ADR index first** to understand current decisions
-2. **Reference specific ADRs** when making recommendations
-3. **Suggest new ADRs** when major decisions are needed
-4. **Update ADRs** when decisions change or evolve
-5. **Maintain consistency** with existing architectural choices
-
-### Context Prompt Template
+### Starting a New AI Session
 ```markdown
-This project uses the Claude Context System for decision tracking. 
+I'm working on [project-name] which uses the Claude Context System.
+Please start by reading:
+1. .claude/adr-index.toml - for decision history
+2. .claude/branches/feat/*.md - for recent decisions
+3. README.md - for current project state
 
-Key context:
-- Current phase: [Development/Production/Maintenance]
-- Major decisions: See .claude/adr-index.toml
-- Open questions: [List pending decisions]
-- Team preferences: [Architecture patterns, technology choices]
-
-Please review the ADR index before making technical recommendations.
+Current focus: [specific area/feature]
+Open questions: [list any pending decisions]
 ```
+
+## Common Objections & Responses
+
+**"We don't have time for more documentation"**
+> You don't have time NOT to do this. How much time do you waste explaining past decisions?
+
+**"Our codebase is too small/simple"**
+> Perfect time to start. It scales with your project and prevents future complexity.
+
+**"We use [other documentation system]"**
+> This complements existing docs. It's specifically for decisions, not general documentation.
+
+**"What if people don't maintain it?"**
+> The helper scripts make it trivial. Plus, AI assistants will remind you when decisions aren't documented.
 
 ## Team Workflow Integration
 
 ### 1. Development Workflow
+
 - Create ADRs in feature branches for major decisions
 - Review ADRs as part of code review process
 - Merge ADRs when decisions are finalized
 - Archive completed ADRs to `merged/` directory
 
 ### 2. Decision Process
+
 ```
 1. Identify decision point
 2. Create ADR in appropriate category
@@ -341,16 +406,43 @@ Please review the ADR index before making technical recommendations.
 7. Update ADR with actual consequences
 ```
 
-### 3. Regular Maintenance
-- **Monthly**: Review recent ADRs and their outcomes
-- **Quarterly**: Assess if any ADRs need updates or superseding
-- **Annually**: Archive old ADRs and review overall architecture
+### 3. GitHub PR Template
+
+```markdown
+## Related ADRs
+- [ ] I've checked for existing ADRs that might be affected
+- [ ] New ADR created: [link to ADR file]
+- [ ] ADR status updated: [which ADR, what change]
+
+## Decision Impact
+- Architecture: [High/Medium/Low/None]
+- Security: [High/Medium/Low/None]
+- Performance: [High/Medium/Low/None]
+```
+
+## Success Metrics
+
+### Week 1
+- [ ] System set up
+- [ ] First ADR created
+- [ ] Team knows it exists
+
+### Month 1
+- [ ] 5+ ADRs documented
+- [ ] Used in at least one technical discussion
+- [ ] New team member used it for onboarding
+
+### Month 3
+- [ ] Part of regular workflow
+- [ ] Prevented at least one repeated discussion
+- [ ] AI assistants consistently reference ADRs
 
 ## Troubleshooting
 
 ### Common Issues
 
 **ADR validation fails**
+
 ```bash
 # Make script executable
 chmod +x .claude/adr-helper.sh
@@ -360,6 +452,7 @@ chmod +x .claude/adr-helper.sh
 ```
 
 **Missing ADR files**
+
 ```bash
 # List what should exist vs what does
 ./.claude/adr-helper.sh status
@@ -367,25 +460,42 @@ find .claude/branches -name "*.md"
 ```
 
 **TOML syntax errors**
+
 ```bash
 # Validate TOML syntax (if you have a TOML parser)
 python3 -c "import tomllib; tomllib.load(open('.claude/adr-index.toml', 'rb'))"
 ```
 
+### Emergency Recovery
+
+```bash
+# If index is corrupted
+cp .claude/adr-index.toml .claude/adr-index.toml.backup
+
+# Find all ADRs
+find .claude -name "*.md" -type f
+
+# Validate structure
+./.claude/adr-helper.sh validate 2>&1 | grep "ERROR"
+```
+
 ## Customization for Different Teams
 
 ### Small Teams (2-5 people)
+
 - Use fewer categories (just `feat/` and `arch/`)
 - Simpler ADR template
 - Less formal approval process
 
 ### Large Teams (10+ people)
+
 - More detailed templates
 - Formal review process
 - Integration with issue tracking
 - Regular ADR review meetings
 
 ### Different Technology Stacks
+
 - **Frontend**: Add UI/UX decision categories
 - **Backend**: Focus on data architecture, API design
 - **DevOps**: Emphasize deployment, monitoring decisions
@@ -394,7 +504,9 @@ python3 -c "import tomllib; tomllib.load(open('.claude/adr-index.toml', 'rb'))"
 ## Advanced Features
 
 ### ADR Relationships
+
 Track how decisions relate to each other:
+
 ```toml
 [relationships.depends_on]
 "new-feature" = ["api-architecture", "database-choice"]
@@ -407,6 +519,7 @@ Track how decisions relate to each other:
 ```
 
 ### Status Tracking
+
 ```toml
 "decision-name" = {
     status = "proposed" | "accepted" | "superseded" | "rejected",
@@ -416,6 +529,7 @@ Track how decisions relate to each other:
 ```
 
 ### Integration with CI/CD
+
 ```yaml
 # .github/workflows/adr-validation.yml
 name: ADR Validation
@@ -429,23 +543,6 @@ jobs:
         run: ./.claude/adr-helper.sh validate
 ```
 
-## Success Metrics
-
-### Short Term (1-3 months)
-- [ ] Team consistently creates ADRs for major decisions
-- [ ] New team members reference ADRs during onboarding
-- [ ] AI assistants provide more consistent recommendations
-
-### Medium Term (3-12 months)
-- [ ] Reduced time spent re-explaining past decisions
-- [ ] Faster architecture reviews using decision history
-- [ ] Clear decision patterns visible across project
-
-### Long Term (12+ months)
-- [ ] Institutional knowledge preserved despite team changes
-- [ ] Pattern reuse across similar projects
-- [ ] Improved decision quality through structured thinking
-
 ## Getting Started Checklist
 
 - [ ] Create `.claude` directory structure
@@ -457,8 +554,27 @@ jobs:
 - [ ] Set up validation in CI (optional)
 - [ ] Train team on ADR creation process
 
+## Live Demo Script (2 minutes)
+
+```bash
+# 1. Show the 3-step setup (30 seconds)
+mkdir -p .claude/{branches/{feat,docs,chore,arch},merged,templates}
+cp CLAUDE-CONTEXT-SYSTEM.md .claude/
+echo "Setup complete!"
+
+# 2. Create a sample ADR (1 minute)
+./.claude/adr-helper.sh new arch "database-selection"
+echo "We chose PostgreSQL because we need ACID compliance"
+
+# 3. Show AI integration (30 seconds)
+echo "Claude, read .claude/adr-index.toml and tell me our database decision"
+# Claude responds with context-aware answer
+```
+
 ---
 
 **This system scales from small teams to large organizations. Start simple and evolve based on your team's needs.**
 
-*For questions or improvements, reference this system in your AI assistant conversations - it's designed to be self-documenting and self-improving.*
+_"In 6 months, you'll either have a well-documented decision history, or you'll wish you did."_
+
+For questions or improvements, reference this system in your AI assistant conversations - it's designed to be self-documenting and self-improving.
