@@ -1,0 +1,169 @@
+# ADR Index for Claude Context System
+# Enhanced Release - v2.0
+
+[metadata]
+version = "2.0"
+language = "markdown"
+project_type = "documentation-system"
+description = "Enhanced AI-managed system with improved tooling and date awareness"
+created = "2025-01-18"
+last_enhanced = "2025-07-18"
+team_size = "small"
+primary_users = ["development-team@example.com"]
+
+# Update configuration - Simple per-item frequencies
+[updates]
+system = "monthly"         # Check canonical gist for system updates
+permissions = "quarterly"  # Review authorization settings
+team_config = "quarterly"  # Review team/collaboration settings
+adr_maintenance = "weekly" # ADR cleanup, archiving, status updates
+context = "daily"          # Current project status, active branches, priorities
+
+# Last check tracking (ISO 8601 format - AI updates these)
+last_check_system = "2025-07-18"
+last_check_permissions = "2025-07-18"
+last_check_team_config = "2025-07-18"
+last_check_adr_maintenance = "2025-07-18"
+last_check_context = "2025-07-18"
+
+# Next due dates (calculated automatically)
+next_due_system = "2025-08-18"          # +1 month
+next_due_permissions = "2025-10-18"     # +3 months
+next_due_team_config = "2025-10-18"     # +3 months
+next_due_adr_maintenance = "2025-07-25" # +1 week
+next_due_context = "2025-07-19"         # +1 day
+
+canonical_url = "https://github.com/joshrotenberg/claude-context-system"
+
+# 🔐 Authorization Configuration
+[permissions]
+use_git = "yes"     # Auto-approve git operations for simulation
+use_gh = "ask"      # Ask before GitHub operations
+auto_commit = "yes" # Auto-commit for smooth simulation
+auto_push = "ask"   # Ask before pushing
+auto_pr = "never"   # Never auto-create PRs
+
+# More granular git controls
+[permissions.git]
+add_files = "yes"       # Can stage files
+commit_changes = "yes"  # Can commit changes
+create_branches = "yes" # Can create branches
+merge_branches = "ask"  # Ask before merging
+push_to_remote = "ask"  # Ask before pushing
+
+# GitHub/GitLab operations
+[permissions.github]
+create_pr = "ask"     # Ask before creating PRs
+merge_pr = "never"    # Never auto-merge
+create_issues = "ask" # Ask before creating issues
+add_labels = "yes"    # Can add labels
+
+# 👥 Multi-Developer Repository Support
+[collaboration]
+passive_mode = false                     # Active mode for simulation
+track_external_changes = true            # Monitor changes
+notify_on_unknown_branches = true        # Alert on new branches
+auto_discover_decisions = true           # Auto-detect decisions for demo
+suggest_adrs_for_external_changes = true # Suggest ADRs
+
+# 🔍 Change Detection & Monitoring
+[monitoring]
+check_frequency = "daily"                                            # How often to scan
+last_scan = "2025-07-18T20:25:00Z"                                   # Last scan time
+branch_patterns = ["feat/*", "arch/*", "docs/*", "fix/*", "chore/*"]
+ignore_branches = ["main", "develop", "temp/*"]
+ignore_authors = ["dependabot[bot]", "github-actions[bot]"]
+
+# AI Decision Detection Settings
+[ai_detection]
+enabled = true # Enable AI detection
+confidence_threshold = 0.7 # Detection confidence
+keywords = [
+    "choose",
+    "decision",
+    "architecture",
+    "framework",
+    "approach",
+    "strategy",
+]
+commit_patterns = ["feat:", "arch:", "docs:", "chore:"]
+
+# Categories for organizing ADRs
+[categories]
+[categories.arch]
+description = "Architectural and design decisions"
+prefix = "arch"
+
+[categories.feat]
+description = "Feature implementation decisions"
+prefix = "feat"
+
+[categories.docs]
+description = "Documentation and communication decisions"
+prefix = "docs"
+
+[categories.chore]
+description = "Process and tooling decisions"
+prefix = "chore"
+
+# Active ADRs (will be populated by simulation)
+[active]
+# This section will be populated as we create ADRs during simulation
+
+# Relationships between ADRs
+[relationships]
+# Will track dependencies and supersessions
+
+# Tags for filtering and organization
+[tags]
+common_tags = [
+    "single-file",
+    "ai-first",
+    "git-native",
+    "zero-dependencies",
+    "team-safe",
+    "date-aware",
+    "enhanced-tooling",
+]
+
+[active.arch]
+"single-file-approach" = { file = "arch/single-file-approach.md", status = "proposed", created = "2025-07-18" }
+
+
+[active.feat]
+"ai-first-messaging" = { file = "feat/ai-first-messaging.md", status = "proposed", created = "2025-07-18" }
+"v1-public-release-readiness" = { file = "feat/v1-public-release-readiness.md", status = "proposed", created = "2025-07-18" }
+"dogfood-our-own-system" = { file = "feat/dogfood-our-own-system.md", status = "proposed", created = "2025-07-18" }
+
+[active.docs]
+"team-permission-model" = { file = "docs/team-permission-model.md", status = "proposed", created = "2025-07-18" }
+"github-as-canonical-location" = { file = "docs/github-as-canonical-location.md", status = "proposed", created = "2025-07-18" }
+
+[active.chore]
+"configurable-update-frequencies" = { file = "chore/configurable-update-frequencies.md", status = "proposed", created = "2025-07-18" }
+"branch-and-pr-workflow" = { file = "chore/branch-and-pr-workflow.md", status = "proposed", created = "2025-07-18" }
+"update-report-improvements" = { file = "chore/update-report-improvements.md", status = "proposed", created = "2025-07-18" }
+"fix-toml-structure-issues" = { file = "chore/fix-toml-structure-issues.md", status = "proposed", created = "2025-07-18" }
+"bash-script-reliability-improvements" = { file = "chore/bash-script-reliability-improvements.md", status = "proposed", created = "2025-07-18" }
+"update-process-improvements" = { file = "chore/update-process-improvements.md", status = "proposed", created = "2025-07-18" }
+"readme-restructure" = { file = "chore/docs/readme-restructure.md", status = "proposed", created = "2025-07-18", component = "docs" }
+
+[active.feat]
+"v1-public-release-readiness" = { file = "feat/v1-public-release-readiness.md", status = "proposed", created = "2025-07-18" }
+"dogfood-our-own-system" = { file = "feat/dogfood-our-own-system.md", status = "proposed", created = "2025-07-18" }
+"context-ingestion-speed-test" = { file = "feat/context-ingestion-speed-test.md", status = "proposed", created = "2025-07-18" }
+"conventional-branching-components" = { file = "feat/conventional-branching-components.md", status = "proposed", created = "2025-07-18" }
+"test-troubleshooting-improvements" = { file = "feat/test-troubleshooting-improvements.md", status = "proposed", created = "2025-07-18" }
+"oauth-integration" = { file = "feat/auth/oauth-integration.md", status = "proposed", created = "2025-07-18", component = "auth" }
+
+[active.docs]
+"github-as-canonical-location" = { file = "docs/github-as-canonical-location.md", status = "proposed", created = "2025-07-18" }
+"ai-assistant-quick-start" = { file = "docs/ai-assistant-quick-start.md", status = "proposed", created = "2025-07-18" }
+"ai-date-awareness-requirement" = { file = "docs/ai-date-awareness-requirement.md", status = "proposed", created = "2025-07-18" }
+"setup-troubleshooting-guide" = { file = "docs/setup-troubleshooting-guide.md", status = "proposed", created = "2025-07-18" }
+"comprehensive-system-improvements" = { file = "docs/comprehensive-system-improvements.md", status = "proposed", created = "2025-07-18" }
+
+[active.arch]
+"microservices-decision" = { file = "arch/microservices-decision.md", status = "proposed", created = "2025-07-18" }
+"real-world-feedback-integration" = { file = "arch/real-world-feedback-integration.md", status = "proposed", created = "2025-07-18" }
+"ai-assistant-context-priorities" = { file = "docs/ai-assistant-context-priorities.md", status = "proposed", created = "2025-07-18" }

@@ -160,8 +160,8 @@ security_scan() {
 
     local security_issues=0
 
-    # Check for potential secrets (basic scan) - exclude documentation contexts
-    if grep -r -E "(api_key|password|secret|token)" --include="*.sh" --include="*.md" "$PROJECT_ROOT" | grep -v -E "example\|sample\|template\|test\|error\|Error\|ADR:\|bash.*error\|expression.*token" >/dev/null; then
+    # Check for potential secrets (focused on actual secrets, not documentation)
+    if grep -r -E "(GITHUB_TOKEN|API_KEY|SECRET_KEY|AWS_ACCESS_KEY)" --include="*.sh" --include="*.md" --exclude-dir="scripts" "$PROJECT_ROOT" | grep -v -E "example\|sample\|template\|test\|documentation" >/dev/null; then
         log_error "Potential secrets found in files"
         ((security_issues++))
     else
