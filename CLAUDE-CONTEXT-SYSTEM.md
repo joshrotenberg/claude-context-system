@@ -40,6 +40,28 @@ Save this file as `.claude/CLAUDE-CONTEXT-SYSTEM.md` in your project root.
 
 That's it! Claude will create all the files, templates, and scripts needed.
 
+## Built on Proven Foundations
+
+This system combines two foundational practices in modern software development:
+
+### 🤝 Conventional Commits + Architectural Decision Records
+
+**[Conventional Commits](https://www.conventionalcommits.org/)** - A specification for standardized commit messages that enable automated tooling and clear communication. Created by the open-source community and inspired by Angular's commit guidelines, it provides structure for `feat:`, `fix:`, `docs:` and other commit types.
+
+**[Architectural Decision Records (ADRs)](https://adr.github.io/)** - Introduced by Michael Nygard in 2011, ADRs capture the context, decision, and consequences of architecturally significant choices. They solve the "why did we choose X?" problem that plagues every software project.
+
+### 🚀 Our Innovation: Unified Context System
+
+We've merged these practices into something new:
+- **Conventional commit structure** for ADR organization and workflow
+- **ADR decision tracking** with modern git-native tooling  
+- **AI assistant integration** that understands both commit history and decision context
+- **Self-contained system** that requires no external dependencies
+
+This creates a decision management system that's both lightweight and powerful - perfect for teams using AI assistants in their development workflow.
+
+**Credits**: Huge thanks to Michael Nygard for ADRs and the Conventional Commits community for commit standardization. This system builds on their foundational work.
+
 ## Quick Reference Card
 
 ### Essential Commands
