@@ -1847,7 +1847,9 @@ _"In 6 months, you'll either have a well-documented decision history with seamle
 
 ## Live Simulation Demo
 
-**Want to see the system in action?** This repository contains a live simulation where the Claude Context System documented its own development decisions:
+**Want to see the system in action?** We ran an automated simulation where the Claude Context System documented its own development decisions using real git workflows.
+
+**Note**: The live simulation artifacts exist in this local repository in the `.claude/` directory and feature branches. The simulation demonstrates real ADRs, git history, and working helper scripts.
 
 ### 🎯 What We Simulated
 - **5 realistic development branches** with different decision types
@@ -1855,20 +1857,28 @@ _"In 6 months, you'll either have a well-documented decision history with seamle
 - **Complete git workflow** showing branch-per-decision pattern
 - **Actual ADR generation** with context, alternatives, and consequences
 
-### 📊 Simulation Results
-```bash
-git log --oneline --graph --all
-# Shows 5 feature branches with architectural decisions
+### 📊 Explore the Live Simulation
 
+If you're in the local repository, you can explore the actual simulation artifacts:
+
+```bash
+# See the decision timeline across branches
+git log --oneline --graph --all
+
+# Explore the ADR structure
 ls .claude/branches/
 # arch/     - Architecture decisions
 # feat/     - Feature implementation decisions  
 # docs/     - Documentation strategy decisions
 # chore/    - Process improvement decisions
 
+# Check system status
 ./.claude/adr-helper.sh status
 # ✓ System initialized
 #   feat: 2 ADRs, arch: 1 ADRs, docs: 1 ADRs, chore: 1 ADRs
+
+# Read a real ADR
+cat .claude/branches/arch/single-file-approach.md
 ```
 
 ### 📋 Real ADRs Created
@@ -1886,6 +1896,8 @@ ls .claude/branches/
 5. **Self-documenting evolution** - The system documented its own creation
 
 **The system just proved itself by managing its own architectural decisions. That's meta, practical, and pretty powerful.**
+
+*Want to run your own simulation? Copy this document to your project as `.claude/CLAUDE-CONTEXT-SYSTEM.md` and ask your AI assistant to set up the system - then make some architectural decisions and watch it capture them automatically.*
 
 ## Time Savings Calculator
 
