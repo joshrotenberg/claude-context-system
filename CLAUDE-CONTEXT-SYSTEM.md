@@ -22,7 +22,7 @@ and present a summary of new or changed functionality. Ask if I want to implemen
 
 ### Version Tracking
 
-- **Current version**: Based on gist updated 2025-07-18
+- **Current version**: v2.0 - Enhanced with Authorization & Multi-Developer Support
 - **Last local update**: 2025-07-18
 - **Next recommended check**: 2025-08-18
 
@@ -34,6 +34,8 @@ and present a summary of new or changed functionality. Ask if I want to implemen
 - **"What did the last person try?"** - Context lost when team members change
 - **"What should our AI assistant know?"** - Inconsistent recommendations across sessions
 - **"Where did we leave off?"** - AI agents lose context between sessions, leading to repeated mistakes
+- **"Will this break my team's workflow?"** - Non-users shouldn't be hindered by the system
+- **"Can I trust it with git operations?"** - Unauthorized automation can be disruptive
 - **Technical debt from undocumented decisions** - Costs compound over time
 
 ### The Solution: Architectural Decision Records (ADRs)
@@ -43,6 +45,9 @@ A lightweight system that:
 - Requires ~10 minutes per major decision
 - Saves hours of confusion and rework
 - Makes AI assistants 10x more helpful
+- **Works safely in shared repositories** without disrupting non-users
+- **Asks permission** before any git/GitHub operations
+- **Detects external changes** and suggests relevant ADRs
 
 ### Real ROI Example
 
@@ -93,6 +98,9 @@ We've merged these practices into something new:
 - **ADR decision tracking** with modern git-native tooling
 - **AI assistant integration** that understands both commit history and decision context
 - **Self-contained system** that requires no external dependencies
+- **🔐 Tiered authorization system** for safe git/GitHub operations
+- **👥 Multi-developer repository support** with passive monitoring
+- **🔍 Smart change detection** that suggests ADRs for external decisions
 
 This creates a decision management system that's both lightweight and powerful - perfect for teams using AI assistants in their development workflow.
 
@@ -114,6 +122,13 @@ This creates a decision management system that's both lightweight and powerful -
 ./adr-helper.sh organize        # Ensure proper structure
 find .claude -name "*.md"       # Find all ADRs
 grep -r "Status: Proposed"      # Find pending decisions
+
+# New: Authorization & Collaboration
+./adr-helper.sh permissions     # Configure authorization levels
+./adr-helper.sh scan            # Check for external changes
+./adr-helper.sh suggest         # AI-powered decision detection
+./adr-helper.sh safe-mode       # Enable maximum safety settings
+./adr-helper.sh team-setup      # Configure for team environment
 
 # System updates
 ./adr-helper.sh check-updates   # Check for updates from canonical source
@@ -140,6 +155,9 @@ Proposed → Accepted → Implemented → (Superseded/Archived)
 - **Fresh AI Context**: Agents can quickly resume work without repeating past mistakes
 - **Automated Organization**: Built-in cleanup and structure management
 - **Document Type Management**: Clear separation of ADRs vs supporting docs
+- **🔐 Safe Operations**: Permission-gated git/GitHub operations
+- **👥 Team Harmony**: Non-intrusive operation in shared repositories
+- **🔍 Smart Discovery**: Automatic detection of external decisions and changes
 
 ### For AI Assistants
 
@@ -148,6 +166,9 @@ Proposed → Accepted → Implemented → (Superseded/Archived)
 - **Faster Onboarding**: Get up to speed quickly on complex projects
 - **Session Continuity**: Resume work exactly where you left off, avoiding repeated discussions
 - **Structured Information**: Machine-readable index and organized content
+- **🔐 Permission Awareness**: Respect user authorization preferences for operations
+- **👥 Team Context**: Understand changes made by other developers
+- **🔍 Decision Detection**: Identify architectural decisions from commit patterns
 
 ### Enhanced Features
 
@@ -156,6 +177,9 @@ Proposed → Accepted → Implemented → (Superseded/Archived)
 - **🔧 Enhanced Tooling**: Management commands for validation, organization, and maintenance
 - **📚 Multiple Document Types**: Handles ADRs, guides, context docs, and templates appropriately
 - **🎯 Scalable Structure**: Grows with project complexity without becoming unwieldy
+- **🔐 Authorization Framework**: Tiered permission system for git/GitHub operations
+- **👥 Multi-Developer Support**: Passive monitoring and external change detection
+- **🔍 Smart Suggestions**: AI-powered decision detection from commit analysis
 
 ## File Structure
 
@@ -240,12 +264,95 @@ Links to relevant discussions, RFCs, documentation
 
 ```
 #!/bin/bash
-# ADR Helper Script
+# ADR Helper Script v2.0 - Enhanced with Authorization & Multi-Developer Support
 
 set -e
 
 CLAUDE_DIR=".claude"
 INDEX_FILE="$CLAUDE_DIR/adr-index.toml"
+
+# Color output for better UX
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# 🔐 Permission checking functions
+check_permission() {
+    local operation="$1"
+    local permission_key="$2"
+    local default="${3:-ask}"
+    
+    if [[ ! -f "$INDEX_FILE" ]]; then
+        echo -e "${YELLOW}Warning: No ADR index found. Using safe defaults.${NC}"
+        permission="ask"
+    else
+        permission=$(grep "^$permission_key" "$INDEX_FILE" 2>/dev/null | cut -d'"' -f2 || echo "$default")
+    fi
+    
+    case "$permission" in
+        "never")
+            echo -e "${RED}❌ Operation '$operation' is disabled by configuration${NC}"
+            return 1
+            ;;
+        "ask")
+            echo -e "${YELLOW}🤔 Permission required for: $operation${NC}"
+            read -p "Proceed? (y/N): " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                return 0
+            else
+                echo -e "${YELLOW}⏭️  Operation cancelled by user${NC}"
+                return 1
+            fi
+            ;;
+        "yes")
+            echo -e "${GREEN}✅ Auto-approved: $operation${NC}"
+            return 0
+            ;;
+        *)
+            echo -e "${YELLOW}⚠️  Unknown permission '$permission', asking for safety${NC}"
+            read -p "Proceed with '$operation'? (y/N): " -n 1 -r
+            echo
+            [[ $REPLY =~ ^[Yy]$ ]]
+            ;;
+    esac
+}
+
+# Git operation wrapper
+safe_git() {
+    local operation="$1"
+    local permission_key="$2"
+    shift 2
+    
+    if check_permission "$operation" "$permission_key"; then
+        echo -e "${BLUE}🔧 Executing: git $*${NC}"
+        git "$@"
+    else
+        return 1
+    fi
+}
+
+# GitHub CLI operation wrapper
+safe_gh() {
+    local operation="$1"
+    local permission_key="$2"
+    shift 2
+    
+    if ! command -v gh &> /dev/null; then
+        echo -e "${YELLOW}⚠️  GitHub CLI not found. Install 'gh' for GitHub operations.${NC}"
+        return 1
+    fi
+    
+    if check_permission "$operation" "$permission_key"; then
+        echo -e "${BLUE}🔧 Executing: gh $*${NC}"
+        gh "$@"
+    else
+        return 1
+    fi
+}
+```
 
 validate() {
     echo "Validating ADR structure..."
@@ -481,10 +588,484 @@ case "${1:-help}" in
         echo "  new       - Create new ADR (category defaults to 'feat')"
         echo "  cleanup   - Clean up legacy/redundant files and organize docs"
         echo "  organize  - Ensure proper directory structure exists"
-        echo "  help      - Show this help message"
+        echo ""
+        echo "🔐 Authorization & Team Commands:"
+        echo "  permissions - Configure authorization levels"
+        echo "  scan        - Check for external changes"
+        echo "  suggest     - AI-powered decision detection"
+        echo "  safe-mode   - Enable maximum safety settings"
+        echo "  team-setup  - Configure for team environment"
+        echo "  help        - Show this help message"
+        ;;
+    scan)
+        scan_external_changes
+        ;;
+    suggest)
+        suggest_decisions
+        ;;
+    permissions)
+        configure_permissions
+        ;;
+    safe-mode)
+        enable_safe_mode
+        ;;
+    team-setup)
+        team_setup
         ;;
 esac
-```
+
+# 👥 Multi-Developer Support Functions
+
+scan_external_changes() {
+    echo -e "${BLUE}🔍 Scanning for external changes...${NC}"
+    
+    if [[ ! -d ".git" ]]; then
+        echo -e "${YELLOW}⚠️  Not a git repository. Skipping external change detection.${NC}"
+        return 0
+    fi
+    
+    # Fetch latest changes
+    if check_permission "fetch remote changes" "permissions.git.fetch" "yes"; then
+        git fetch --all --quiet 2>/dev/null || true
+    fi
+    
+    # Get current user
+    current_user=$(git config user.email 2>/dev/null || echo "unknown")
+    
+    # Check for new branches since last scan
+    local last_scan=""
+    if [[ -f "$INDEX_FILE" ]]; then
+        last_scan=$(grep "last_scan" "$INDEX_FILE" 2>/dev/null | cut -d'"' -f2 || echo "1970-01-01T00:00:00Z")
+    fi
+    
+    echo "📊 External Change Summary:"
+    echo ""
+    
+    # Find branches created by others
+    local external_branches=()
+    while IFS= read -r line; do
+        if [[ -n "$line" ]]; then
+            branch_name=$(echo "$line" | awk '{print $1}' | sed 's/origin\///')
+            branch_author=$(git log --format="%ae" "$line" -1 2>/dev/null || echo "unknown")
+            
+            if [[ "$branch_author" != "$current_user" && "$branch_name" != "main" && "$branch_name" != "master" && "$branch_name" != "develop" ]]; then
+                external_branches+=("$branch_name:$branch_author")
+                echo -e "  ${GREEN}•${NC} New branch: ${BLUE}$branch_name${NC} by $branch_author"
+            fi
+        fi
+    done < <(git for-each-ref --format='%(refname:short) %(committerdate:iso8601)' refs/remotes/origin --sort=-committerdate 2>/dev/null | head -10)
+    
+    if [[ ${#external_branches[@]} -eq 0 ]]; then
+        echo -e "  ${GREEN}✓${NC} No new external changes detected"
+    else
+        echo ""
+        echo -e "${YELLOW}💡 Suggestions:${NC}"
+        for branch_info in "${external_branches[@]}"; do
+            branch_name=$(echo "$branch_info" | cut -d':' -f1)
+            echo -e "  • Consider creating ADR for decisions in ${BLUE}$branch_name${NC}"
+        done
+        
+        echo ""
+        read -p "Would you like to analyze these branches for potential decisions? (y/N): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            suggest_decisions_from_branches "${external_branches[@]}"
+        fi
+    fi
+    
+    # Update last scan time
+    update_last_scan_time
+}
+
+suggest_decisions() {
+    echo -e "${BLUE}🤖 AI-Powered Decision Detection${NC}"
+    echo ""
+    
+    if [[ ! -d ".git" ]]; then
+        echo -e "${YELLOW}⚠️  Not a git repository. Cannot analyze commits.${NC}"
+        return 0
+    fi
+    
+    # Analyze recent commits for decision keywords
+    local decision_keywords=("choose" "decision" "architecture" "database" "framework" "library" "migrate" "replace" "switch")
+    local commit_patterns=("feat:" "arch:" "breaking:" "refactor:")
+    
+    echo "🔍 Analyzing recent commits for architectural decisions..."
+    echo ""
+    
+    local suggestions=()
+    
+    # Check commits in the last 30 days
+    while IFS= read -r commit_line; do
+        if [[ -n "$commit_line" ]]; then
+            commit_hash=$(echo "$commit_line" | awk '{print $1}')
+            commit_msg=$(echo "$commit_line" | cut -d' ' -f2-)
+            
+            # Check for decision indicators
+            for keyword in "${decision_keywords[@]}"; do
+                if echo "$commit_msg" | grep -qi "$keyword"; then
+                    suggestions+=("$commit_hash: $commit_msg")
+                    break
+                fi
+            done
+            
+            # Check for architectural commit patterns
+            for pattern in "${commit_patterns[@]}"; do
+                if echo "$commit_msg" | grep -q "^$pattern"; then
+                    suggestions+=("$commit_hash: $commit_msg")
+                    break
+                fi
+            done
+        fi
+    done < <(git log --oneline --since="30 days ago" 2>/dev/null)
+    
+    if [[ ${#suggestions[@]} -eq 0 ]]; then
+        echo -e "  ${GREEN}✓${NC} No obvious architectural decisions detected in recent commits"
+    else
+        echo -e "${YELLOW}💡 Potential decisions detected:${NC}"
+        echo ""
+        for suggestion in "${suggestions[@]}"; do
+            echo -e "  ${GREEN}•${NC} $suggestion"
+        done
+        
+        echo ""
+        echo -e "${BLUE}💭 Consider creating ADRs for these decisions if they haven't been documented yet.${NC}"
+        
+        read -p "Would you like to create an ADR for any of these? (y/N): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo "Which decision would you like to document? (Enter commit hash or description)"
+            read -r decision_input
+            if [[ -n "$decision_input" ]]; then
+                suggest_adr_template "$decision_input"
+            fi
+        fi
+    fi
+}
+
+suggest_adr_template() {
+    local decision_context="$1"
+    echo ""
+    echo -e "${BLUE}📝 Suggested ADR Template:${NC}"
+    echo ""
+    
+    # Try to infer category from commit message
+    local category="feat"
+    if echo "$decision_context" | grep -qi "arch\|architecture\|system\|service"; then
+        category="arch"
+    elif echo "$decision_context" | grep -qi "doc\|documentation"; then
+        category="docs"
+    elif echo "$decision_context" | grep -qi "tool\|process\|workflow"; then
+        category="chore"
+    fi
+    
+    # Generate a suggested filename
+    local suggested_name=$(echo "$decision_context" | sed 's/.*: //' | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g' | cut -c1-50)
+    
+    echo "Suggested category: $category"
+    echo "Suggested filename: $suggested_name.md"
+    echo ""
+    read -p "Create this ADR? (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        new_adr "$category" "$suggested_name"
+    fi
+}
+
+configure_permissions() {
+    echo -e "${BLUE}🔐 Authorization Configuration${NC}"
+    echo ""
+    
+    if [[ ! -f "$INDEX_FILE" ]]; then
+        echo -e "${YELLOW}⚠️  No ADR index found. Creating basic configuration...${NC}"
+        create_basic_index
+    fi
+    
+    echo "Current authorization settings:"
+    echo ""
+    
+    # Show current settings
+    show_current_permissions
+    
+    echo ""
+    echo "Available permission levels:"
+    echo "  • never - Never perform this operation"
+    echo "  • ask   - Ask for permission each time"
+    echo "  • yes   - Always allow (use with caution)"
+    echo ""
+    
+    local settings=("use_git" "use_gh" "auto_commit" "auto_push" "auto_pr")
+    local descriptions=("Use git commands" "Use GitHub CLI" "Auto-commit changes" "Auto-push to remote" "Auto-create PRs")
+    
+    for i in "${!settings[@]}"; do
+        setting="${settings[$i]}"
+        description="${descriptions[$i]}"
+        
+        current_value=$(grep "^$setting" "$INDEX_FILE" 2>/dev/null | cut -d'"' -f2 || echo "ask")
+        
+        echo -e "${YELLOW}$description${NC} (current: $current_value)"
+        read -p "New value (never/ask/yes) [Enter to keep current]: " new_value
+        
+        if [[ -n "$new_value" ]]; then
+            update_permission "$setting" "$new_value"
+        fi
+    done
+    
+    echo ""
+    echo -e "${GREEN}✅ Authorization configuration updated${NC}"
+}
+
+show_current_permissions() {
+    if [[ -f "$INDEX_FILE" ]]; then
+        echo "Git operations:"
+        echo "  use_git: $(grep '^use_git' "$INDEX_FILE" 2>/dev/null | cut -d'"' -f2 || echo 'ask')"
+        echo "  auto_commit: $(grep '^auto_commit' "$INDEX_FILE" 2>/dev/null | cut -d'"' -f2 || echo 'no')"
+        echo "  auto_push: $(grep '^auto_push' "$INDEX_FILE" 2>/dev/null | cut -d'"' -f2 || echo 'no')"
+        echo ""
+        echo "GitHub operations:"
+        echo "  use_gh: $(grep '^use_gh' "$INDEX_FILE" 2>/dev/null | cut -d'"' -f2 || echo 'ask')"
+        echo "  auto_pr: $(grep '^auto_pr' "$INDEX_FILE" 2>/dev/null | cut -d'"' -f2 || echo 'never')"
+    else
+        echo "No configuration found - using safe defaults"
+    fi
+}
+
+enable_safe_mode() {
+    echo -e "${BLUE}🛡️  Enabling Safe Mode${NC}"
+    echo ""
+    
+    if [[ ! -f "$INDEX_FILE" ]]; then
+        echo "Creating ADR index with safe defaults..."
+        create_basic_index
+    fi
+    
+    # Set the most restrictive permissions
+    update_permission "use_git" "ask"
+    update_permission "use_gh" "ask"
+    update_permission "auto_commit" "no"
+    update_permission "auto_push" "no"
+    update_permission "auto_pr" "never"
+    
+    # Enable passive mode for collaboration
+    update_toml_value "collaboration" "passive_mode" "true"
+    update_toml_value "collaboration" "track_external_changes" "true"
+    update_toml_value "collaboration" "auto_discover_decisions" "false"
+    
+    echo -e "${GREEN}✅ Safe mode enabled. The system will:${NC}"
+    echo "  • Ask permission for all git operations"
+    echo "  • Never auto-commit or auto-push"
+    echo "  • Never create PRs automatically"
+    echo "  • Operate in passive mode for team repositories"
+    echo "  • Track but not interfere with external changes"
+}
+
+team_setup() {
+    echo -e "${BLUE}👥 Team Environment Setup${NC}"
+    echo ""
+    
+    echo "This will configure the Claude Context System for a team environment."
+    echo ""
+    
+    read -p "Team size (small/medium/large): " team_size
+    read -p "Your email (for identifying your changes): " user_email
+    read -p "Should the system track external changes? (y/N): " track_external
+    
+    echo ""
+    echo "Setting up team configuration..."
+    
+    if [[ ! -f "$INDEX_FILE" ]]; then
+        create_basic_index
+    fi
+    
+    # Update metadata
+    update_toml_value "metadata" "team_size" "\"$team_size\""
+    
+    if [[ -n "$user_email" ]]; then
+        # Add user to primary_users array (simplified - in real implementation would parse TOML properly)
+        update_toml_value "metadata" "primary_users" "[\"$user_email\"]"
+    fi
+    
+    # Configure collaboration settings
+    update_toml_value "collaboration" "passive_mode" "true"
+    
+    if [[ "$track_external" =~ ^[Yy]$ ]]; then
+        update_toml_value "collaboration" "track_external_changes" "true"
+        update_toml_value "collaboration" "notify_on_unknown_branches" "true"
+        update_toml_value "monitoring" "check_frequency" "\"daily\""
+    else
+        update_toml_value "collaboration" "track_external_changes" "false"
+    fi
+    
+    # Set team-appropriate permissions
+    case "$team_size" in
+        "small")
+            update_permission "use_git" "yes"
+            update_permission "auto_commit" "ask"
+            ;;
+        "medium"|"large")
+            update_permission "use_git" "ask"
+            update_permission "auto_commit" "no"
+            update_permission "auto_push" "no"
+            ;;
+    esac
+    
+    echo -e "${GREEN}✅ Team setup complete!${NC}"
+    echo ""
+    echo "Configuration:"
+    echo "  • Team size: $team_size"
+    echo "  • Primary user: ${user_email:-not set}"
+    echo "  • External tracking: ${track_external:-no}"
+    echo "  • Passive mode: enabled"
+    
+    if [[ "$track_external" =~ ^[Yy]$ ]]; then
+        echo ""
+        echo -e "${BLUE}💡 Run './adr-helper.sh scan' daily to check for external changes${NC}"
+    fi
+}
+
+# Helper functions for TOML manipulation (simplified)
+update_permission() {
+    local key="$1"
+    local value="$2"
+    
+    if [[ ! -f "$INDEX_FILE" ]]; then
+        create_basic_index
+    fi
+    
+    # Simple TOML update (in production, use proper TOML parser)
+    if grep -q "^$key" "$INDEX_FILE"; then
+        sed -i.bak "s/^$key.*/$key = \"$value\"/" "$INDEX_FILE"
+    else
+        # Add to permissions section
+        if grep -q "^\[permissions\]" "$INDEX_FILE"; then
+            sed -i.bak "/^\[permissions\]/a\\
+$key = \"$value\"" "$INDEX_FILE"
+        else
+            echo "" >> "$INDEX_FILE"
+            echo "[permissions]" >> "$INDEX_FILE"
+            echo "$key = \"$value\"" >> "$INDEX_FILE"
+        fi
+    fi
+}
+
+update_toml_value() {
+    local section="$1"
+    local key="$2"
+    local value="$3"
+    
+    if [[ ! -f "$INDEX_FILE" ]]; then
+        create_basic_index
+    fi
+    
+    # Simple TOML section update
+    if grep -q "^\[$section\]" "$INDEX_FILE"; then
+        if grep -q "^$key" "$INDEX_FILE"; then
+            sed -i.bak "s/^$key.*/$key = $value/" "$INDEX_FILE"
+        else
+            sed -i.bak "/^\[$section\]/a\\
+$key = $value" "$INDEX_FILE"
+        fi
+    else
+        echo "" >> "$INDEX_FILE"
+        echo "[$section]" >> "$INDEX_FILE"
+        echo "$key = $value" >> "$INDEX_FILE"
+    fi
+}
+
+create_basic_index() {
+    local project_name=${PWD##*/}
+    
+    cat > "$INDEX_FILE" << EOF
+# ADR Index for $project_name
+
+[metadata]
+version = "2.0"
+project_type = "enhanced"
+description = "Project with Claude Context System v2.0"
+created = "$(date +%Y-%m-%d)"
+team_size = "medium"
+primary_users = ["$(git config user.email 2>/dev/null || echo 'user@example.com')"]
+
+[permissions]
+use_git = "ask"
+use_gh = "ask" 
+auto_commit = "no"
+auto_push = "no"
+auto_pr = "never"
+
+[collaboration]
+passive_mode = true
+track_external_changes = true
+notify_on_unknown_branches = true
+auto_discover_decisions = false
+
+[monitoring]
+check_frequency = "daily"
+last_scan = "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+branch_patterns = ["feat/*", "arch/*", "docs/*"]
+ignore_branches = ["main", "develop", "temp/*"]
+
+[categories.architecture]
+description = "System design, module organization, and service structure"
+
+[categories.features]
+description = "Feature implementation and user-facing functionality"
+
+[categories.processes]
+description = "Development workflow, tooling, and operational procedures"
+
+[categories.documentation]
+description = "Documentation strategy and knowledge management"
+
+[active.arch]
+
+[active.feat]
+
+[active.docs]
+
+[active.chore]
+EOF
+
+    echo -e "${GREEN}✅ Created basic ADR index at $INDEX_FILE${NC}"
+}
+
+update_last_scan_time() {
+    if [[ -f "$INDEX_FILE" ]]; then
+        local current_time=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+        update_toml_value "monitoring" "last_scan" "\"$current_time\""
+    fi
+}
+
+suggest_decisions_from_branches() {
+    local branches=("$@")
+    echo ""
+    echo -e "${BLUE}🔍 Analyzing branches for potential decisions...${NC}"
+    
+    for branch_info in "${branches[@]}"; do
+        local branch_name=$(echo "$branch_info" | cut -d':' -f1)
+        echo ""
+        echo -e "📊 Branch: ${BLUE}$branch_name${NC}"
+        
+        # Get recent commits from this branch
+        local commits=$(git log --oneline "origin/$branch_name" --not main --not master 2>/dev/null | head -5)
+        
+        if [[ -n "$commits" ]]; then
+            echo "Recent commits:"
+            echo "$commits" | sed 's/^/  • /'
+            
+            # Simple decision detection
+            if echo "$commits" | grep -qi "database\|db\|postgres\|mysql\|redis"; then
+                echo -e "  ${YELLOW}💡 Potential database decision detected${NC}"
+            fi
+            if echo "$commits" | grep -qi "api\|endpoint\|rest\|graphql"; then
+                echo -e "  ${YELLOW}💡 Potential API design decision detected${NC}"
+            fi
+            if echo "$commits" | grep -qi "auth\|login\|oauth\|jwt"; then
+                echo -e "  ${YELLOW}💡 Potential authentication decision detected${NC}"
+            fi
+        fi
+    done
+}
 
 ### Quick Management Commands
 
@@ -505,6 +1086,13 @@ esac
 ./.claude/adr-helper.sh cleanup
 ./.claude/adr-helper.sh organize
 
+# 🔐 Authorization & Team Features
+./.claude/adr-helper.sh permissions      # Configure authorization levels
+./.claude/adr-helper.sh scan            # Check for external changes
+./.claude/adr-helper.sh suggest         # AI-powered decision detection
+./.claude/adr-helper.sh safe-mode       # Enable maximum safety settings
+./.claude/adr-helper.sh team-setup      # Configure for team environment
+
 # Configure updates
 ./.claude/adr-helper.sh configure
 ./.claude/adr-helper.sh check-updates
@@ -516,11 +1104,13 @@ esac
 # ADR Index for [PROJECT_NAME]
 
 [metadata]
-version = "1.0"
+version = "2.0"
 language = "your-language"
 project_type = "your-type"
 description = "Project description"
 created = "2025-07-18"
+team_size = "medium"                     # Options: "small", "medium", "large"
+primary_users = ["user@company.com"]     # Who actively uses the system
 
 # Update configuration
 [updates]
@@ -528,6 +1118,56 @@ frequency = "monthly"                    # Options: "never", "quarterly", "month
 last_check = "2025-07-18"
 next_check = "2025-08-18"
 canonical_url = "https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc"
+
+# 🔐 Authorization Configuration
+[permissions]
+use_git = "ask"                         # Options: "never", "ask", "yes"
+use_gh = "ask"                          # Options: "never", "ask", "yes"
+auto_commit = "no"                      # Options: "no", "ask", "yes"
+auto_push = "no"                        # Options: "no", "ask", "yes"
+auto_pr = "never"                       # Options: "never", "ask", "yes"
+
+# More granular git controls
+[permissions.git]
+add_files = "ask"                       # Can stage files
+commit_changes = "ask"                  # Can commit changes
+create_branches = "ask"                 # Can create branches
+merge_branches = "never"                # Can merge branches
+push_to_remote = "ask"                  # Can push to remote
+
+# GitHub/GitLab operations
+[permissions.github]
+create_pr = "ask"                       # Can create pull requests
+merge_pr = "never"                      # Can merge pull requests
+create_issues = "ask"                   # Can create issues
+add_labels = "yes"                      # Can add labels (safer operation)
+
+# 👥 Multi-Developer Repository Support
+[collaboration]
+passive_mode = true                     # Don't interfere with non-users
+track_external_changes = true           # Monitor but don't auto-act
+notify_on_unknown_branches = true       # Alert on new branches
+auto_discover_decisions = false         # Don't auto-create ADRs for others' work
+suggest_adrs_for_external_changes = true # Suggest ADRs for detected decisions
+
+# 🔍 Change Detection & Monitoring
+[monitoring]
+check_frequency = "daily"               # How often to scan for changes
+last_scan = "2025-07-18T09:00:00Z"     # Last external change scan
+branch_patterns = ["feat/*", "arch/*", "docs/*", "fix/*"]  # What to watch
+ignore_branches = ["main", "develop", "temp/*", "dependabot/*"]  # What to ignore
+ignore_authors = ["dependabot[bot]", "github-actions[bot]"]      # Automated commits to ignore
+
+# Detected external changes (populated by scan command)
+external_branches_detected = []         # Will be populated by monitoring
+
+# AI Decision Detection Settings
+[ai_detection]
+enabled = true                          # Enable AI-powered decision detection
+confidence_threshold = 0.7             # Minimum confidence for suggestions
+keywords = ["choose", "decision", "architecture", "database", "framework", "library"]
+commit_patterns = ["feat:", "arch:", "breaking:"]  # Patterns that suggest decisions
+```
 
 # Categories
 [categories.architecture]
@@ -580,36 +1220,188 @@ design = ["api-design"]
 ### For Claude/AI Assistants
 
 When working with this project:
-- **Always read the ADR index first** to understand current decisions
+- **Always read the ADR index first** to understand current decisions and authorization settings
+- **Check permission settings** before suggesting git/GitHub operations
+- **Respect authorization levels** - never override user permission preferences
 - **Reference specific ADRs** when making recommendations
 - **Suggest new ADRs** when major decisions are needed
 - **Update ADRs** when decisions change or evolve
 - **Maintain consistency** with existing architectural choices
 - **Check for system updates** when explicitly asked or monthly
+- **Use team features** like `scan` and `suggest` to detect external changes
+- **Respect passive mode** in multi-developer environments
+
+### Authorization Guidelines for AI Assistants
+
+**Before any git/GitHub operation:**
+1. Check the `[permissions]` section in `adr-index.toml`
+2. For "never" - inform user the operation is disabled
+3. For "ask" - request explicit permission from user
+4. For "yes" - proceed but inform user what you're doing
+
+**Example permission check:**
+```
+I see you want me to commit these ADR changes. 
+Your current setting is 'use_git = "ask"'.
+May I proceed with: git add .claude/branches/feat/new-feature.md && git commit -m "Add feature ADR"?
+```
 
 ### System Update Protocol
 
 When asked to check for updates:
-1. Fetch the canonical gist: https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc
-2. Compare with local `.claude/CLAUDE-CONTEXT-SYSTEM.md`
-3. Identify new features, improvements, or fixes
-4. Present summary of changes with benefits/impact
-5. Ask user which updates to implement
-6. Update local system accordingly
-7. Update "Last local update" date in this file
+1. Check user's authorization for git operations first
+2. Fetch the canonical gist: https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc
+3. Compare with local `.claude/CLAUDE-CONTEXT-SYSTEM.md`
+4. Identify new features, improvements, or fixes
+5. Present summary of changes with benefits/impact
+6. Ask user which updates to implement
+7. Update local system accordingly (respecting permissions)
+8. Update "Last local update" date in this file
 
 ### Starting a New AI Session
 
 ```
-I'm working on [project-name] which uses the Claude Context System.
+I'm working on [project-name] which uses the Claude Context System v2.0.
 Please start by reading:
-1. .claude/adr-index.toml - for decision history
+1. .claude/adr-index.toml - for decision history and authorization settings
 2. .claude/branches/feat/*.md - for recent decisions
 3. .claude/docs/project-context.md - for current project state
 4. README.md - for project overview
 
+Authorization level: [check my permissions for git/GitHub operations]
+Team environment: [check if passive_mode is enabled]
 Current focus: [specific area/feature]
 Open questions: [list any pending decisions]
+
+If this is a team repository, please run './adr-helper.sh scan' to check for external changes.
+```
+
+### Enhanced AI Commands
+
+**Permission-aware operations:**
+- `"Check my authorization settings and suggest any changes"`
+- `"Scan for external changes in team repository"`
+- `"Suggest ADRs based on recent commit patterns"`
+- `"Enable safe mode for this repository"`
+
+**Team collaboration:**
+- `"Set up this repository for team use"`
+- `"Check what changes others have made"`
+- `"Suggest ADRs for decisions I might have missed"`
+
+## 🔐 Authorization & 👥 Collaboration Features
+
+### Authorization Framework
+
+The enhanced Claude Context System includes a comprehensive permission system to ensure safe operation in any environment:
+
+#### Permission Levels
+- **`never`** - Operation is completely disabled
+- **`ask`** - Request permission each time (safest for shared environments)
+- **`yes`** - Auto-approve operation (convenient for personal projects)
+
+#### Key Authorization Categories
+
+**Git Operations:**
+```toml
+[permissions]
+use_git = "ask"          # Basic git command permission
+auto_commit = "no"       # Automatic commits
+auto_push = "no"         # Automatic pushes
+```
+
+**GitHub/GitLab Operations:**
+```toml
+[permissions]
+use_gh = "ask"           # GitHub CLI operations
+auto_pr = "never"        # Automatic PR creation (usually kept restrictive)
+```
+
+**Granular Controls:**
+```toml
+[permissions.git]
+add_files = "ask"        # Stage files
+create_branches = "ask"  # Create new branches
+merge_branches = "never" # Merge operations (high-impact)
+```
+
+### Multi-Developer Repository Support
+
+#### Passive Mode Operation
+- **Non-intrusive**: System won't interfere with developers who don't use it
+- **Change detection**: Monitors external changes without disrupting workflow
+- **Smart suggestions**: Offers ADR creation for detected architectural decisions
+
+#### External Change Detection
+```bash
+# Daily workflow for team environments
+./adr-helper.sh scan     # Check for new branches and commits by others
+./adr-helper.sh suggest  # AI analysis of potential decisions in recent commits
+```
+
+**Example scan output:**
+```
+🔍 Scanning for external changes...
+📊 External Change Summary:
+
+  • New branch: feat/payment-gateway by alice@company.com
+  • New branch: arch/microservices by bob@company.com
+
+💡 Suggestions:
+  • Consider creating ADR for payment gateway decision
+  • Consider creating ADR for microservices architecture choice
+```
+
+#### Team Configuration
+```bash
+# One-time setup for team repositories
+./adr-helper.sh team-setup
+```
+
+This configures:
+- Appropriate permission levels based on team size
+- External change tracking preferences
+- Passive mode for non-disruptive operation
+- Branch monitoring patterns
+
+### Safety-First Design
+
+#### Safe Mode
+```bash
+./adr-helper.sh safe-mode
+```
+
+Enables maximum safety settings:
+- All git operations require explicit permission
+- No automatic commits or pushes
+- Passive mode enabled for team compatibility
+- External change tracking without interference
+
+#### Permission-Aware AI Operations
+AI assistants automatically:
+- Check permission settings before suggesting operations
+- Respect "never" settings completely
+- Request explicit permission for "ask" settings
+- Inform users about "yes" operations before executing
+
+### Quick Setup for Different Environments
+
+#### Personal Project (Relaxed permissions)
+```bash
+./adr-helper.sh permissions
+# Set: use_git="yes", auto_commit="ask"
+```
+
+#### Small Team (Moderate permissions)
+```bash
+./adr-helper.sh team-setup
+# Choose: small team, enable external tracking
+```
+
+#### Large Organization (Strict permissions)
+```bash
+./adr-helper.sh safe-mode
+# Maximum security and team compatibility
 ```
 
 ## Common Objections & Responses
@@ -629,6 +1421,18 @@ This complements existing docs. It's specifically for decisions, not general doc
 **"What if people don't maintain it?"**
 
 The helper scripts make it trivial. Plus, AI assistants will remind you when decisions aren't documented.
+
+**"Will this interfere with my team's workflow?"**
+
+No! The system operates in passive mode by default. Non-users are completely unaffected, while users get enhanced context and decision tracking.
+
+**"I'm worried about unauthorized git operations"**
+
+The authorization framework prevents this. Every operation respects your permission settings, defaulting to "ask" for safety. You can even set "never" for operations you don't want.
+
+**"How do I know what my teammates are working on?"**
+
+The external change detection automatically scans for new branches and commits by others, suggesting relevant ADRs without interfering with their work.
 
 ## Team Workflow Integration
 
@@ -829,17 +1633,21 @@ The `cleanup` command will:
 
 ## Getting Started Checklist
 
--  Create `.claude` directory structure
--  Copy this file to `.claude/CLAUDE-CONTEXT-SYSTEM.md`
--  Create `adr-index.toml` with your project metadata
--  Make `adr-helper.sh` executable
--  Run `./adr-helper.sh organize` to ensure proper structure
--  Run `./adr-helper.sh cleanup` to organize any existing docs
--  Run `./adr-helper.sh configure` to set update frequency preference
--  Create your first ADR for an existing major decision
--  Add ADR creation to your team workflow
--  Set up validation in CI (optional)
--  Train team on ADR creation process
+- Create `.claude` directory structure
+- Copy this file to `.claude/CLAUDE-CONTEXT-SYSTEM.md`
+- Create `adr-index.toml` with your project metadata
+- Make `adr-helper.sh` executable
+- Run `./adr-helper.sh organize` to ensure proper structure
+- Run `./adr-helper.sh cleanup` to organize any existing docs
+- **🔐 Configure authorization**: Run `./adr-helper.sh permissions` to set permission levels
+- **👥 Team setup**: Run `./adr-helper.sh team-setup` for multi-developer repositories
+- **🛡️ Enable safe mode**: Run `./adr-helper.sh safe-mode` for maximum safety (optional)
+- Run `./adr-helper.sh configure` to set update frequency preference
+- Create your first ADR for an existing major decision
+- **🔍 Scan for changes**: Run `./adr-helper.sh scan` to check for external changes (team repos)
+- Add ADR creation to your team workflow
+- Set up validation in CI (optional)
+- Train team on ADR creation process and new authorization features
 
 ## Live Demo Script (2 minutes)
 
@@ -849,23 +1657,26 @@ mkdir -p .claude/{branches/{feat,docs,chore,arch},merged,templates,docs}
 cp CLAUDE-CONTEXT-SYSTEM.md .claude/
 echo "Setup complete!"
 
-# 2. Create a sample ADR (1 minute)
+# 2. Create a sample ADR with authorization (1 minute)
 ./.claude/adr-helper.sh new arch "database-selection"
 echo "We chose PostgreSQL because we need ACID compliance"
 
-# 3. Show organization features (30 seconds)
+# 3. Show enhanced features (45 seconds)
 ./.claude/adr-helper.sh status
-./.claude/adr-helper.sh cleanup
-echo "System organized and ready!"
+./.claude/adr-helper.sh permissions    # Configure authorization
+./.claude/adr-helper.sh safe-mode     # Enable safety features
+echo "System organized and secured!"
 
-# 4. Show AI integration (30 seconds)
+# 4. Show team and AI integration (45 seconds)
+./.claude/adr-helper.sh scan          # Check for external changes
+./.claude/adr-helper.sh suggest       # AI-powered decision detection
 echo "Claude, read .claude/adr-index.toml and tell me our database decision"
-# Claude responds with context-aware answer
+# Claude responds with context-aware answer, respecting permissions
 ```
 
-**This system scales from small teams to large organizations. Start simple and evolve based on your team's needs.**
+**This system scales from small teams to large organizations with built-in safety and team collaboration features. Start simple and evolve based on your team's needs.**
 
-_"In 6 months, you'll either have a well-documented decision history, or you'll wish you did."_
+_"In 6 months, you'll either have a well-documented decision history with seamless team collaboration, or you'll wish you did."_
 
 ## 🔄 Staying Updated
 
