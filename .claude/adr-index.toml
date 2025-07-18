@@ -32,7 +32,7 @@ next_due_team_config = "2025-04-18"     # +3 months
 next_due_adr_maintenance = "2025-01-25" # +1 week
 next_due_context = "2025-01-19"         # +1 day
 
-canonical_url = "https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc"
+canonical_url = "https://github.com/joshrotenberg/claude-context-system"
 
 # 🔐 Authorization Configuration
 [permissions]
@@ -136,3 +136,4 @@ common_tags = [
 "configurable-update-frequencies" = { file = "chore/configurable-update-frequencies.md", status = "proposed", created = "2025-07-18" }
 "v1-public-release-readiness" = { file = "feat/v1-public-release-readiness.md", status = "proposed", created = "2025-07-18" }
 "dogfood-our-own-system" = { file = "feat/dogfood-our-own-system.md", status = "proposed", created = "2025-07-18" }
+"github-as-canonical-location" = { file = "docs/github-as-canonical-location.md", status = "proposed", created = "2025-07-18" }

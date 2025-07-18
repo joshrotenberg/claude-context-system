@@ -23,16 +23,18 @@
 
 ## 🔄 Canonical Reference & Updates
 
-**📍 Canonical Location**: https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc
+**📍 Canonical Location**: https://github.com/joshrotenberg/claude-context-system
 
-This document is maintained in the above gist as the **canonical reference**. You should periodically check for updates and implement them as appropriate for your project.
+This document is maintained in the above repository as the **canonical reference**. You should periodically check for updates and implement them as appropriate for your project.
+
+**Single-file distribution**: Available at https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc
 
 ### Automated Update Checking
 
 To stay current with improvements, ask your AI assistant:
 
 ```
-"Check the canonical Claude Context System gist at https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc 
+"Check the canonical Claude Context System repository at https://github.com/joshrotenberg/claude-context-system 
 for any updates since [last-check-date]. Compare it with our current .claude/CLAUDE-CONTEXT-SYSTEM.md 
 and present a summary of new or changed functionality. Ask if I want to implement these changes."
 ```
@@ -96,8 +98,8 @@ That's it! Claude will create all the files, templates, and scripts needed.
 Add a reminder to check for system updates:
 
 ```
-"Remind me to check the canonical Claude Context System gist 
-(https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc) 
+"Remind me to check the canonical Claude Context System repository 
+(https://github.com/joshrotenberg/claude-context-system) 
 for updates next month and implement any improvements."
 ```
 
@@ -1235,7 +1237,7 @@ next_due_team_config = "2025-04-18"   # +3 months
 next_due_adr_maintenance = "2025-01-25" # +1 week
 next_due_context = "2025-01-19"       # +1 day
 
-canonical_url = "https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc"
+canonical_url = "https://github.com/joshrotenberg/claude-context-system"
 
 # 🔐 Authorization Configuration
 [permissions]
@@ -1924,7 +1926,7 @@ Calculate your potential time savings:
 
 ## 🔄 Staying Updated
 
-This system is continuously improved. The canonical version at https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc receives regular enhancements from real-world usage across multiple projects.
+This system is continuously improved. The canonical version at https://github.com/joshrotenberg/claude-context-system receives regular enhancements from real-world usage across multiple projects.
 
 **Configurable Update Frequency**: Set your preferred update frequency in `.claude/adr-index.toml` (never, quarterly, monthly, weekly, or daily) and ask your AI assistant to check for improvements accordingly.
 
