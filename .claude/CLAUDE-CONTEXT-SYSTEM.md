@@ -39,6 +39,23 @@
 
 **Speed Test**: To measure and validate context ingestion efficiency: `./scripts/context-speed-test.sh`
 
+### 🎯 Critical Context Priorities for AI Assistants
+
+**Always remember these priorities in every session:**
+
+1. **USE GITHUB CLI (`gh`) FIRST**: Check `gh auth status` before manual GitHub operations
+   - Use `gh pr create`, `gh issue create`, `gh repo clone` instead of manual web workflows
+   - Leverage `gh` for all repository management tasks
+
+2. **MAINTAIN CLEAN ORGANIZATION**: Keep top-level directory clean
+   - Backup files go in `.claude/backups/`
+   - No temporary artifacts or build outputs in root
+   - Remove outdated git remotes regularly
+
+3. **LEVERAGE AVAILABLE TOOLING**: Use helper scripts and automation consistently
+   - Prefer command-line tools over manual processes
+   - Check what tools are available before reinventing workflows
+
 ## 🎯 The Promise: AI Does the Work, You Stay Focused
 
 **For Developers:**
