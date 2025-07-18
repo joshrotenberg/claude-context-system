@@ -82,7 +82,17 @@ lint_shell_scripts() {
     local lint_errors=0
 
     # Find all shell scripts
+    local scripts=()
     while IFS= read -r -d '' script; do
+        scripts+=("$script")
+    done < <(find "$PROJECT_ROOT" -name "*.sh" -type f -print0)
+
+    if [ ${#scripts[@]} -eq 0 ]; then
+        log_warning "No shell scripts found to lint"
+        return 0
+    fi
+
+    for script in "${scripts[@]}"; do
         ((script_count++))
         log_info "Checking $(basename "$script")..."
 
@@ -94,13 +104,11 @@ lint_shell_scripts() {
                 log_success "$(basename "$script") passed lint"
             fi
         else
-            log_warning "shellcheck not available, skipping lint"
+            log_warning "shellcheck not available, skipping lint for $script"
         fi
-    done < <(find "$PROJECT_ROOT" -name "*.sh" -type f -print0)
+    done
 
-    if [ $script_count -eq 0 ]; then
-        log_warning "No shell scripts found to lint"
-    elif [ $lint_errors -eq 0 ]; then
+    if [ $lint_errors -eq 0 ]; then
         log_success "All $script_count shell scripts passed lint checks"
     else
         log_error "$lint_errors out of $script_count scripts failed lint checks"
