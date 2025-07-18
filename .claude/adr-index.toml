@@ -137,4 +137,5 @@ common_tags = [
 "v1-public-release-readiness" = { file = "feat/v1-public-release-readiness.md", status = "proposed", created = "2025-07-18" }
 "dogfood-our-own-system" = { file = "feat/dogfood-our-own-system.md", status = "proposed", created = "2025-07-18" }
 "github-as-canonical-location" = { file = "docs/github-as-canonical-location.md", status = "proposed", created = "2025-07-18" }
+"ai-assistant-quick-start" = { file = "docs/ai-assistant-quick-start.md", status = "proposed", created = "2025-01-18" }
 "branch-and-pr-workflow" = { file = "chore/branch-and-pr-workflow.md", status = "proposed", created = "2025-07-18" }

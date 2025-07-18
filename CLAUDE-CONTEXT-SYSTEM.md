@@ -2,6 +2,37 @@
 
 **A self-contained, AI-managed system for maintaining project context and architectural decisions. You focus on coding, your AI assistant handles the rest.**
 
+## 🚀 AI Assistant Quick Start
+
+**If you're an AI assistant getting oriented on this project for the first time, follow this sequence:**
+
+### 1. Essential Context (Read First)
+- **Current Status**: v1.0 public release ready after 2+ years of development
+- **Project Purpose**: Self-contained system for AI-managed architectural decision tracking
+- **Key Innovation**: Single-file distribution with zero setup friction
+- **Live Demo**: This repository dogfoods its own system in `.claude/` directory
+
+### 2. Rapid Orientation Checklist
+1. **Read the ADR Index**: `.claude/adr-index.toml` - shows current decisions and project metadata
+2. **Check Recent ADRs**: Look in `.claude/branches/feat/` for latest feature decisions
+3. **Understand Architecture**: Read `.claude/branches/arch/single-file-approach.md` 
+4. **Review Permissions**: Check `.claude/branches/docs/team-permission-model.md`
+5. **Current Branch Structure**: Use `git branch -a` to see active development
+
+### 3. Key Files for Context
+- **`.claude/adr-index.toml`** - Project metadata, permissions, active ADRs
+- **`.claude/branches/*/`** - All architectural decisions organized by type
+- **`README.md`** - Public-facing overview and quick start
+- **This file** - Complete system specification and setup guide
+
+### 4. Current Development Phase
+- **Status**: Post-v1.0 public release
+- **Active Work**: Optimizing AI assistant onboarding and user experience
+- **Permission Model**: Three-tier system (never/ask/yes) for team safety
+- **Distribution**: Raw GitHub content (no longer using Gist)
+
+**Quick Command**: To see all recent decisions: `find .claude/branches -name "*.md" -exec basename {} \; | sort`
+
 ## 🎯 The Promise: AI Does the Work, You Stay Focused
 
 **For Developers:**
