@@ -41,9 +41,9 @@ and present a summary of new or changed functionality. Ask if I want to implemen
 
 ### Version Tracking
 
-- **Current version**: v2.0 - Enhanced with Authorization & Multi-Developer Support
-- **Last local update**: 2025-07-18
-- **Next recommended check**: 2025-08-18
+- **Current version**: v2.1 - AI-First with Configurable Updates
+- **Last local update**: 2025-01-18
+- **Next recommended check**: 2025-02-18
 
 ## The Problem This Solves (2-Minute Pitch)
 
@@ -183,10 +183,14 @@ grep -r "Status: Proposed"      # Find pending decisions
 ./adr-helper.sh safe-mode       # Enable maximum safety settings
 ./adr-helper.sh team-setup      # Configure for team environment
 
-# System updates
-./adr-helper.sh check-updates   # Check for updates from canonical source
-./adr-helper.sh configure       # Configure update frequency (never to daily)
-"Check canonical gist for updates to Claude Context System"
+# Date-aware update management
+./adr-helper.sh check-due       # Show overdue items with current date
+./adr-helper.sh context-update  # Manual context refresh
+./adr-helper.sh status-brief    # Quick project status summary
+./adr-helper.sh set-frequency <item> <freq>  # Set update frequencies
+./adr-helper.sh priorities      # Show current branch priorities
+./adr-helper.sh blockers        # Highlight blocked work
+./adr-helper.sh ready-to-merge  # Show completed ADRs ready to merge
 ```
 
 ### ADR Lifecycle
@@ -314,6 +318,8 @@ Links to relevant discussions, RFCs, documentation
 ## System Setup Scripts
 
 ### ADR Helper Script (adr-helper.sh)
+
+**Note: This is the complete script with all referenced commands. Your AI assistant should create this file during setup.**
 
 ```
 #!/bin/bash
@@ -1140,15 +1146,19 @@ suggest_decisions_from_branches() {
 ./.claude/adr-helper.sh organize
 
 # 🔐 Authorization & Team Features
-./.claude/adr-helper.sh permissions      # Configure authorization levels
-./.claude/adr-helper.sh scan            # Check for external changes
-./.claude/adr-helper.sh suggest         # AI-powered decision detection
-./.claude/adr-helper.sh safe-mode       # Enable maximum safety settings
-./.claude/adr-helper.sh team-setup      # Configure for team environment
+./adr-helper.sh permissions      # Configure authorization levels
+./adr-helper.sh scan            # Check for external changes
+./adr-helper.sh suggest         # AI-powered decision detection
+./adr-helper.sh safe-mode       # Enable maximum safety settings
+./adr-helper.sh team-setup      # Configure for team environment
 
-# Configure updates
-./.claude/adr-helper.sh configure
-./.claude/adr-helper.sh check-updates
+# 🗓️ Date-Aware Update Management
+./adr-helper.sh check-due        # Show all overdue update types
+./adr-helper.sh context-update   # Manual context refresh
+./adr-helper.sh status-brief     # Quick project status summary
+./adr-helper.sh priorities       # Show current branch priorities
+./adr-helper.sh blockers         # Highlight blocked work
+./adr-helper.sh ready-to-merge   # Show completed ADRs ready to merge
 ```
 
 ## Sample ADR Index (adr-index.toml)
@@ -1174,18 +1184,18 @@ adr_maintenance = "weekly"      # ADR cleanup, archiving, status updates
 context = "daily"               # Current project status, active branches, priorities
 
 # Last check tracking (ISO 8601 format - AI updates these)
-last_check_system = "2025-01-15"
-last_check_permissions = "2025-01-15" 
-last_check_team_config = "2025-01-15"
-last_check_adr_maintenance = "2025-01-13"
-last_check_context = "2025-01-17"
+last_check_system = "2025-01-18"
+last_check_permissions = "2025-01-18" 
+last_check_team_config = "2025-01-18"
+last_check_adr_maintenance = "2025-01-18"
+last_check_context = "2025-01-18"
 
 # Next due dates (calculated automatically)
-next_due_system = "2025-02-15"        # +1 month
-next_due_permissions = "2025-04-15"   # +3 months  
-next_due_team_config = "2025-04-15"   # +3 months
-next_due_adr_maintenance = "2025-01-20" # +1 week
-next_due_context = "2025-01-18"       # +1 day
+next_due_system = "2025-02-18"        # +1 month
+next_due_permissions = "2025-04-18"   # +3 months  
+next_due_team_config = "2025-04-18"   # +3 months
+next_due_adr_maintenance = "2025-01-25" # +1 week
+next_due_context = "2025-01-19"       # +1 day
 
 canonical_url = "https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc"
 
@@ -1748,8 +1758,9 @@ echo "We chose PostgreSQL because we need ACID compliance"
 echo "System organized and secured!"
 
 # 4. Show team and AI integration (45 seconds)
-./.claude/adr-helper.sh scan          # Check for external changes
-./.claude/adr-helper.sh suggest       # AI-powered decision detection
+./.claude/adr-helper.sh check-due      # Check what maintenance is overdue
+./.claude/adr-helper.sh context-update  # Refresh current project status
+./.claude/adr-helper.sh status-brief    # Get quick project overview
 echo "Claude, read .claude/adr-index.toml and tell me our database decision"
 # Claude responds with context-aware answer, respecting permissions
 ```
@@ -1765,3 +1776,78 @@ This system is continuously improved. The canonical version at https://gist.gith
 **Configurable Update Frequency**: Set your preferred update frequency in `.claude/adr-index.toml` (never, quarterly, monthly, weekly, or daily) and ask your AI assistant to check for improvements accordingly.
 
 For questions or improvements, reference this system in your AI assistant conversations - it's designed to be self-documenting and self-improving.
+
+## ✅ Setup Validation Checklist
+
+After setup, verify everything is working:
+
+### 1. File Structure Check
+```bash
+ls -la .claude/
+# Should show: CLAUDE-CONTEXT-SYSTEM.md, adr-index.toml, adr-helper.sh, branches/, merged/, templates/
+```
+
+### 2. Script Functionality
+```bash
+chmod +x .claude/adr-helper.sh
+./.claude/adr-helper.sh validate
+./.claude/adr-helper.sh status
+```
+
+### 3. AI Assistant Integration Test
+Ask your AI assistant:
+```
+"Read .claude/adr-index.toml and .claude/CLAUDE-CONTEXT-SYSTEM.md. 
+Check current date and tell me if any updates are overdue. 
+Then create a test ADR for choosing this context system."
+```
+
+### 4. Permission Configuration
+```bash
+./.claude/adr-helper.sh permissions
+# Configure based on your team size and trust level
+```
+
+### 5. First ADR Creation
+```bash
+./.claude/adr-helper.sh new arch "adopt-claude-context-system"
+# Should create .claude/branches/arch/adopt-claude-context-system.md
+```
+
+### 6. Validation Success Indicators
+- ✅ All files created without errors
+- ✅ adr-helper.sh commands run successfully  
+- ✅ AI assistant can read and update configurations
+- ✅ First ADR created and appears in status
+- ✅ Permissions configured appropriately
+
+If any step fails, ask your AI assistant to debug and fix the issue.
+
+---
+
+## 📋 Changelog
+
+### v2.1 (2025-01-18) - AI-First Approach & Configurable Updates
+- **Added**: Prominent AI-managed messaging throughout document
+- **Added**: Per-item configurable update frequencies (system, permissions, context, etc.)
+- **Added**: Date-aware tracking with current date reminders for AI assistants
+- **Added**: Context update system for current project status tracking
+- **Added**: Setup validation checklist and troubleshooting guidance
+- **Enhanced**: Value proposition focusing on developer productivity over system complexity
+- **Enhanced**: AI assistant integration prompts with permission awareness
+- **Restructured**: Opening sections to emphasize "AI does the work, you focus on coding"
+
+### v2.0 (2024-12-XX) - Authorization & Multi-Developer Support  
+- **Added**: Tiered authorization system with permission levels (never/ask/yes)
+- **Added**: Multi-developer repository support with passive mode
+- **Added**: External change detection and suggestion system
+- **Added**: Team configuration for different organization sizes
+- **Added**: Safety-first design with conservative defaults
+- **Enhanced**: AI assistant integration with permission awareness
+- **Enhanced**: Collaboration features without disrupting non-users
+
+### v1.0 (2024-XX-XX) - Initial Release
+- **Added**: Core ADR system with conventional commit integration
+- **Added**: AI assistant context management
+- **Added**: Self-contained setup and templates  
+- **Added**: Basic automation scripts and TOML configuration
