@@ -106,7 +106,7 @@ lint_shell_scripts() {
 
     for script in "${scripts[@]}"; do
         log_info "DEBUG: Starting iteration for script: $script"
-        ((script_count++))
+        script_count=$((script_count + 1))
         log_info "Checking $(basename "$script")..."
         log_info "DEBUG: Full path: $script"
         log_info "DEBUG: File exists: $([ -f "$script" ] && echo 'yes' || echo 'no')"
