@@ -26,17 +26,44 @@ current_date() {
 
 # Create new ADR
 new_adr() {
-    local category="${1:-feat}"
+    local category_input="${1:-feat}"
     local title="${2:-new-decision}"
     local sanitized_title=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
-    local adr_file="$CLAUDE_DIR/branches/$category/$sanitized_title.md"
+
+    # Parse category and optional component
+    local category=""
+    local component=""
+
+    # Handle component syntax: feat/auth or feat(auth)
+    if [[ "$category_input" =~ ^([a-z]+)\(([a-z0-9-]+)\)$ ]]; then
+        # Pattern: feat(auth)
+        category="${BASH_REMATCH[1]}"
+        component="${BASH_REMATCH[2]}"
+    elif [[ "$category_input" =~ ^([a-z]+)/([a-z0-9-]+)$ ]]; then
+        # Pattern: feat/auth
+        category="${BASH_REMATCH[1]}"
+        component="${BASH_REMATCH[2]}"
+    else
+        # Simple pattern: feat
+        category="$category_input"
+    fi
+
+    # Build file path with optional component
+    local adr_file=""
+    if [[ -n "$component" ]]; then
+        adr_file="$CLAUDE_DIR/branches/$category/$component/$sanitized_title.md"
+        mkdir -p "$CLAUDE_DIR/branches/$category/$component"
+    else
+        adr_file="$CLAUDE_DIR/branches/$category/$sanitized_title.md"
+    fi
+
+    # Ensure category directory exists
+    mkdir -p "$CLAUDE_DIR/branches/$category"
 
     if [[ -f "$adr_file" ]]; then
         echo -e "${RED}ERROR: ADR already exists: $adr_file${NC}"
         exit 1
     fi
-
-    mkdir -p "$(dirname "$adr_file")"
 
     cat > "$adr_file" << EOF
 # ADR: $title
@@ -77,8 +104,15 @@ EOF
         echo "[$section_name]" >> "$INDEX_FILE"
     fi
 
-    # Add ADR entry to index
-    echo "\"$sanitized_title\" = { file = \"$category/$sanitized_title.md\", status = \"proposed\", created = \"$(current_date)\" }" >> "$INDEX_FILE"
+    # Add ADR entry to index with component support
+    local adr_path=""
+    if [[ -n "$component" ]]; then
+        adr_path="$category/$component/$sanitized_title.md"
+        echo "\"$sanitized_title\" = { file = \"$adr_path\", status = \"proposed\", created = \"$(current_date)\", component = \"$component\" }" >> "$INDEX_FILE"
+    else
+        adr_path="$category/$sanitized_title.md"
+        echo "\"$sanitized_title\" = { file = \"$adr_path\", status = \"proposed\", created = \"$(current_date)\" }" >> "$INDEX_FILE"
+    fi
 
     echo -e "${BLUE}📝 Updated index: $INDEX_FILE${NC}"
 }
@@ -196,6 +230,10 @@ show_help() {
     echo ""
     echo "Commands:"
     echo "  new <category> <title>  Create new ADR"
+    echo "                          Examples:"
+    echo "                            $0 new feat \"user-authentication\""
+    echo "                            $0 new feat/auth \"oauth-integration\""
+    echo "                            $0 new \"chore(docs)\" \"readme-update\""
     echo "  list                    List all ADRs"
     echo "  status                  Show system status"
     echo "  validate                Validate system integrity"
@@ -216,6 +254,10 @@ case "${1:-help}" in
     new)
         if [[ -z "$2" || -z "$3" ]]; then
             echo -e "${RED}ERROR: Usage: $0 new <category> <title>${NC}"
+            echo -e "${BLUE}Examples:${NC}"
+            echo -e "  $0 new feat \"user-authentication\""
+            echo -e "  $0 new feat/auth \"oauth-integration\""
+            echo -e "  $0 new \"chore(docs)\" \"readme-update\""
             exit 1
         fi
         new_adr "$2" "$3"

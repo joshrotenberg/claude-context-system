@@ -139,5 +139,9 @@ common_tags = [
 "github-as-canonical-location" = { file = "docs/github-as-canonical-location.md", status = "proposed", created = "2025-07-18" }
 "ai-assistant-quick-start" = { file = "docs/ai-assistant-quick-start.md", status = "proposed", created = "2025-07-18" }
 "context-ingestion-speed-test" = { file = "feat/context-ingestion-speed-test.md", status = "proposed", created = "2025-07-18" }
+"conventional-branching-components" = { file = "feat/conventional-branching-components.md", status = "proposed", created = "2025-07-18" }
 "ai-date-awareness-requirement" = { file = "docs/ai-date-awareness-requirement.md", status = "proposed", created = "2025-07-18" }
 "branch-and-pr-workflow" = { file = "chore/branch-and-pr-workflow.md", status = "proposed", created = "2025-07-18" }
+"oauth-integration" = { file = "feat/auth/oauth-integration.md", status = "proposed", created = "2025-07-18", component = "auth" }
+"readme-restructure" = { file = "chore/docs/readme-restructure.md", status = "proposed", created = "2025-07-18", component = "docs" }
+"microservices-decision" = { file = "arch/microservices-decision.md", status = "proposed", created = "2025-07-18" }

@@ -323,8 +323,19 @@ Proposed → Accepted → Implemented → (Superseded/Archived)
 ├── adr-helper.sh                # Management and automation scripts
 ├── branches/                    # Active ADRs by category
 │   ├── feat/                    # Feature decisions
+│   │   ├── simple-feature.md      # Simple pattern
+│   │   ├── auth/                   # Component pattern
+│   │   │   ├── oauth-integration.md
+│   │   │   └── session-management.md
+│   │   └── api/
+│   │       └── rate-limiting.md
 │   ├── docs/                    # Documentation decisions
 │   ├── chore/                   # Process/tooling decisions
+│   │   ├── build-optimization.md  # Simple pattern
+│   │   ├── docs/                   # Component pattern
+│   │   │   └── readme-restructure.md
+│   │   └── ci/
+│   │       └── github-actions.md
 │   └── arch/                    # Architecture decisions
 ├── merged/                      # Completed/finalized ADRs
 ├── templates/                   # ADR templates
@@ -333,6 +344,31 @@ Proposed → Accepted → Implemented → (Superseded/Archived)
 ```
 
 ## Document Types and Organization
+
+### Conventional Branching Support
+
+The system supports both **simple** and **component-based** ADR organization to match your team's conventional commit and branching patterns:
+
+**Simple Pattern:**
+```bash
+./adr-helper.sh new feat "user-authentication"
+# Creates: .claude/branches/feat/user-authentication.md
+```
+
+**Component Pattern (matches conventional commits):**
+```bash
+./adr-helper.sh new feat/auth "oauth-integration"
+# Creates: .claude/branches/feat/auth/oauth-integration.md
+
+./adr-helper.sh new "chore(docs)" "readme-update"  
+# Creates: .claude/branches/chore/docs/readme-update.md
+```
+
+**Benefits:**
+- ✅ **Team Alignment**: Matches existing conventional commit/branch workflows
+- ✅ **Better Organization**: Component-level grouping within decision types
+- ✅ **Backward Compatible**: Existing simple pattern continues to work
+- ✅ **Flexible Adoption**: Teams choose their preferred convention style
 
 ### Core ADR System (Root Level)
 - `CLAUDE-CONTEXT-SYSTEM.md` - Complete system guide and setup
