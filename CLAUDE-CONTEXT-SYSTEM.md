@@ -1845,6 +1845,48 @@ _"In 6 months, you'll either have a well-documented decision history with seamle
 
 > "Our team adopted this after losing 3 days to 'why did we choose Kubernetes over ECS?' - nobody remembered the trade-offs we evaluated. Now every architectural decision is captured automatically as we make it. Last month a new developer found and understood our entire architecture history in 15 minutes. The ROI was immediate." - Engineering Team Lead, 50-person startup
 
+## Live Simulation Demo
+
+**Want to see the system in action?** This repository contains a live simulation where the Claude Context System documented its own development decisions:
+
+### 🎯 What We Simulated
+- **5 realistic development branches** with different decision types
+- **Real architectural choices** the system faced during development
+- **Complete git workflow** showing branch-per-decision pattern
+- **Actual ADR generation** with context, alternatives, and consequences
+
+### 📊 Simulation Results
+```bash
+git log --oneline --graph --all
+# Shows 5 feature branches with architectural decisions
+
+ls .claude/branches/
+# arch/     - Architecture decisions
+# feat/     - Feature implementation decisions  
+# docs/     - Documentation strategy decisions
+# chore/    - Process improvement decisions
+
+./.claude/adr-helper.sh status
+# ✓ System initialized
+#   feat: 2 ADRs, arch: 1 ADRs, docs: 1 ADRs, chore: 1 ADRs
+```
+
+### 📋 Real ADRs Created
+- **single-file-approach**: Why distribute as one self-contained file
+- **ai-first-messaging**: How to communicate the AI-managed concept
+- **team-permission-model**: Three-tier safety system for shared repos
+- **configurable-update-frequencies**: Per-item maintenance schedules
+- **v1-public-release-readiness**: Consolidating features for launch
+
+### 💡 Key Insights Proven
+1. **Natural git integration** - Feels like normal development workflow
+2. **Rich decision context** - Each ADR captures real trade-offs and reasoning
+3. **AI-parseable structure** - Perfect for AI assistant consumption
+4. **Team workflow compatibility** - Works with existing code review processes
+5. **Self-documenting evolution** - The system documented its own creation
+
+**The system just proved itself by managing its own architectural decisions. That's meta, practical, and pretty powerful.**
+
 ## Time Savings Calculator
 
 Calculate your potential time savings:
