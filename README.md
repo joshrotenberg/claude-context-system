@@ -19,7 +19,7 @@ That's it! No installation, no dependencies, just natural conversation with your
 
 ## 📍 Get the System
 
-**Single-file distribution:** [Download CLAUDE-CONTEXT-SYSTEM.md](https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc)
+**Single-file distribution:** [Download CLAUDE-CONTEXT-SYSTEM.md](https://raw.githubusercontent.com/joshrotenberg/claude-context-system/main/CLAUDE-CONTEXT-SYSTEM.md)
 
 **Canonical location:** This repository contains the complete system with live dogfooding demonstration.
 
@@ -118,7 +118,7 @@ just demo      # System demonstration
 
 ## 🔗 Links
 
-- **Download system:** [Single-file gist](https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc)
+- **Download system:** [Raw file download](https://raw.githubusercontent.com/joshrotenberg/claude-context-system/main/CLAUDE-CONTEXT-SYSTEM.md)
 - **Full repository:** [GitHub](https://github.com/joshrotenberg/claude-context-system)
 - **Live demo:** Explore `.claude/` in this repository
 

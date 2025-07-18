@@ -32,7 +32,7 @@ We will establish **GitHub repository as the canonical location** while maintain
 - Issue tracking and contribution workflow
 - Complete git history and branch structure
 
-**Secondary distribution:** https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc  
+**Secondary distribution:** https://raw.githubusercontent.com/joshrotenberg/claude-context-system/main/CLAUDE-CONTEXT-SYSTEM.md  
 - Single-file `CLAUDE-CONTEXT-SYSTEM.md` for easy copying
 - Updated automatically from canonical repository
 - Perfect for users who just want to copy the system
