@@ -86,9 +86,10 @@ check: lint docs
 
 # Validate file structure and permissions
 validate:
-    @echo "📁 Validating project structure..."
+    @echo "🔍 Validating system structure..."
     @chmod +x scripts/run-tests.sh
     @./scripts/run-tests.sh structure
+    @just check-sync
 
 # Install the system locally for testing
 install:
@@ -143,8 +144,12 @@ release-check:
         echo "❌ No version found in documentation"; \
         exit 1; \
     fi
-    @if ! grep -q "{{version}}" CLAUDE-CONTEXT-SYSTEM.md; then \
-        echo "❌ Version {{version}} not found in changelog"; \
+    @if [ ! -f "CHANGELOG.md" ]; then \
+        echo "❌ CHANGELOG.md not found"; \
+        exit 1; \
+    fi
+    @if ! grep -q "{{version}}" CHANGELOG.md; then \
+        echo "❌ Version {{version}} not found in CHANGELOG.md"; \
         exit 1; \
     fi
     @if [ $(wc -l < CLAUDE-CONTEXT-SYSTEM.md) -lt 1000 ]; then \
@@ -171,7 +176,7 @@ release: tag dist
     @echo "  3. Upload dist/* to GitHub release"
 
 # Run CI-equivalent checks locally
-ci: setup test security release-check
+ci: setup test security release-check validate-context
     @echo "🎉 All CI checks passed!"
 
 # Set up for development and run tests
@@ -258,7 +263,7 @@ update:
     @echo "✅ Dependencies updated"
 
 # Run complete validation pipeline
-all: clean setup test security docs release-check
+all: clean setup test security docs release-check validate-context
     @echo "🎉 Complete validation pipeline passed!"
 
 # Show system status and health
@@ -278,6 +283,27 @@ status:
     @echo "just: $(which just >/dev/null 2>&1 && echo "✅" || echo "❌")"
     @echo "shellcheck: $(which shellcheck >/dev/null 2>&1 && echo "✅" || echo "❌")"
     @echo "bats: $(which bats >/dev/null 2>&1 && echo "✅" || echo "❌")"
+
+# Sync main context file to .claude directory
+sync-context:
+    @echo "🔄 Syncing CLAUDE-CONTEXT-SYSTEM.md to .claude directory..."
+    @cp CLAUDE-CONTEXT-SYSTEM.md .claude/CLAUDE-CONTEXT-SYSTEM.md
+    @echo "✅ Context files synchronized"
+
+# Check if context files are in sync
+check-sync:
+    @echo "🔍 Checking context file synchronization..."
+    @if ! diff -q CLAUDE-CONTEXT-SYSTEM.md .claude/CLAUDE-CONTEXT-SYSTEM.md >/dev/null 2>&1; then \
+        echo "❌ Context files are out of sync"; \
+        echo "Run 'just sync-context' to synchronize them"; \
+        exit 1; \
+    else \
+        echo "✅ Context files are synchronized"; \
+    fi
+
+# Validate context file consistency (used in CI)
+validate-context: check-sync
+    @echo "✅ Context file consistency validated"
 
 # Initialize new project with context system
 init target_dir:

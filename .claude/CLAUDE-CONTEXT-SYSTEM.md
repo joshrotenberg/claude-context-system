@@ -23,16 +23,18 @@
 
 ## 🔄 Canonical Reference & Updates
 
-**📍 Canonical Location**: https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc
+**📍 Canonical Location**: https://github.com/joshrotenberg/claude-context-system
 
-This document is maintained in the above gist as the **canonical reference**. You should periodically check for updates and implement them as appropriate for your project.
+This document is maintained in the above repository as the **canonical reference**. You should periodically check for updates and implement them as appropriate for your project.
+
+**Single-file distribution**: Available at https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc
 
 ### Automated Update Checking
 
 To stay current with improvements, ask your AI assistant:
 
 ```
-"Check the canonical Claude Context System gist at https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc 
+"Check the canonical Claude Context System repository at https://github.com/joshrotenberg/claude-context-system 
 for any updates since [last-check-date]. Compare it with our current .claude/CLAUDE-CONTEXT-SYSTEM.md 
 and present a summary of new or changed functionality. Ask if I want to implement these changes."
 ```
@@ -96,8 +98,8 @@ That's it! Claude will create all the files, templates, and scripts needed.
 Add a reminder to check for system updates:
 
 ```
-"Remind me to check the canonical Claude Context System gist 
-(https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc) 
+"Remind me to check the canonical Claude Context System repository 
+(https://github.com/joshrotenberg/claude-context-system) 
 for updates next month and implement any improvements."
 ```
 
@@ -1235,7 +1237,7 @@ next_due_team_config = "2025-04-18"   # +3 months
 next_due_adr_maintenance = "2025-01-25" # +1 week
 next_due_context = "2025-01-19"       # +1 day
 
-canonical_url = "https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc"
+canonical_url = "https://github.com/joshrotenberg/claude-context-system"
 
 # 🔐 Authorization Configuration
 [permissions]
@@ -1845,6 +1847,60 @@ _"In 6 months, you'll either have a well-documented decision history with seamle
 
 > "Our team adopted this after losing 3 days to 'why did we choose Kubernetes over ECS?' - nobody remembered the trade-offs we evaluated. Now every architectural decision is captured automatically as we make it. Last month a new developer found and understood our entire architecture history in 15 minutes. The ROI was immediate." - Engineering Team Lead, 50-person startup
 
+## Live Simulation Demo
+
+**Want to see the system in action?** We ran an automated simulation where the Claude Context System documented its own development decisions using real git workflows.
+
+**Note**: The live simulation artifacts exist in this local repository in the `.claude/` directory and feature branches. The simulation demonstrates real ADRs, git history, and working helper scripts.
+
+### 🎯 What We Simulated
+- **5 realistic development branches** with different decision types
+- **Real architectural choices** the system faced during development
+- **Complete git workflow** showing branch-per-decision pattern
+- **Actual ADR generation** with context, alternatives, and consequences
+
+### 📊 Explore the Live Simulation
+
+If you're in the local repository, you can explore the actual simulation artifacts:
+
+```bash
+# See the decision timeline across branches
+git log --oneline --graph --all
+
+# Explore the ADR structure
+ls .claude/branches/
+# arch/     - Architecture decisions
+# feat/     - Feature implementation decisions  
+# docs/     - Documentation strategy decisions
+# chore/    - Process improvement decisions
+
+# Check system status
+./.claude/adr-helper.sh status
+# ✓ System initialized
+#   feat: 2 ADRs, arch: 1 ADRs, docs: 1 ADRs, chore: 1 ADRs
+
+# Read a real ADR
+cat .claude/branches/arch/single-file-approach.md
+```
+
+### 📋 Real ADRs Created
+- **single-file-approach**: Why distribute as one self-contained file
+- **ai-first-messaging**: How to communicate the AI-managed concept
+- **team-permission-model**: Three-tier safety system for shared repos
+- **configurable-update-frequencies**: Per-item maintenance schedules
+- **v1-public-release-readiness**: Consolidating features for launch
+
+### 💡 Key Insights Proven
+1. **Natural git integration** - Feels like normal development workflow
+2. **Rich decision context** - Each ADR captures real trade-offs and reasoning
+3. **AI-parseable structure** - Perfect for AI assistant consumption
+4. **Team workflow compatibility** - Works with existing code review processes
+5. **Self-documenting evolution** - The system documented its own creation
+
+**The system just proved itself by managing its own architectural decisions. That's meta, practical, and pretty powerful.**
+
+*Want to run your own simulation? Copy this document to your project as `.claude/CLAUDE-CONTEXT-SYSTEM.md` and ask your AI assistant to set up the system - then make some architectural decisions and watch it capture them automatically.*
+
 ## Time Savings Calculator
 
 Calculate your potential time savings:
@@ -1870,7 +1926,7 @@ Calculate your potential time savings:
 
 ## 🔄 Staying Updated
 
-This system is continuously improved. The canonical version at https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc receives regular enhancements from real-world usage across multiple projects.
+This system is continuously improved. The canonical version at https://github.com/joshrotenberg/claude-context-system receives regular enhancements from real-world usage across multiple projects.
 
 **Configurable Update Frequency**: Set your preferred update frequency in `.claude/adr-index.toml` (never, quarterly, monthly, weekly, or daily) and ask your AI assistant to check for improvements accordingly.
 
