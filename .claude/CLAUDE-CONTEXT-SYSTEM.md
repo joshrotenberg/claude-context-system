@@ -18,7 +18,7 @@
 ### 2. Rapid Orientation Checklist
 1. **Read the ADR Index**: `.claude/adr-index.toml` - shows current decisions and project metadata
 2. **Check Recent ADRs**: Look in `.claude/branches/feat/` for latest feature decisions
-3. **Understand Architecture**: Read `.claude/branches/arch/single-file-approach.md` 
+3. **Understand Architecture**: Read `.claude/branches/arch/single-file-approach.md`
 4. **Review Permissions**: Check `.claude/branches/docs/team-permission-model.md`
 5. **Current Branch Structure**: Use `git branch -a` to see active development
 
@@ -1311,6 +1311,248 @@ next_due_adr_maintenance = "2025-01-25" # +1 week
 next_due_context = "2025-01-19"       # +1 day
 
 canonical_url = "https://github.com/joshrotenberg/claude-context-system"
+
+## 🗓️ CRITICAL: AI Assistant Date Awareness
+
+**AI Assistant: ALWAYS start every session with:**
+
+1. **Check current date first** - Never assume dates
+2. Read `.claude/adr-index.toml` [updates] section 
+3. Compare current date with `next_due_*` fields
+4. Alert user to any overdue maintenance
+5. Provide context update if due
+
+**Never assume dates - always check current date first!**
+
+## Quick Reference Card
+
+### Essential Commands
+
+```
+# Daily workflow
+./adr-helper.sh status          # Check system health
+./adr-helper.sh list            # See active decisions
+./adr-helper.sh new feat "name" # Create new ADR
+
+# Maintenance
+./adr-helper.sh validate        # Verify integrity
+./adr-helper.sh check-due       # Show overdue items with current date
+./adr-helper.sh context-update  # Manual context refresh
+./adr-helper.sh status-brief    # Quick project status summary
+
+# Enhanced Features
+./adr-helper.sh scan            # Check for external changes
+./adr-helper.sh priorities      # Show current priorities and focus areas
+find .claude -name "*.md"       # Find all ADRs
+grep -r "Status: Proposed"      # Find pending decisions
+```
+
+### ADR Lifecycle
+
+```
+Proposed → Accepted → Implemented → (Superseded/Archived)
+         ↘ Rejected → Archived
+```
+
+## 🔧 Troubleshooting Guide
+
+**If you're experiencing setup issues, this section will help you diagnose and fix common problems.**
+
+### Common Setup Issues
+
+#### 1. **TOML Syntax Errors**
+**Symptoms**: Commands fail with "TOML parsing error" or validation failures
+```bash
+# Check TOML syntax
+./.claude/adr-helper.sh validate
+
+# Common fixes:
+# - Check for unmatched braces { }
+# - Ensure proper quoting of strings
+# - Verify section headers like [metadata]
+```
+
+#### 2. **Bash Arithmetic Failures**
+**Symptoms**: "syntax error in expression" when running status commands
+```bash
+# This indicates whitespace contamination in variables
+# Fixed in v2.0+ with variable sanitization
+
+# Quick fix - update your helper script:
+# Replace: count=$(command | wc -l)
+# With: count=$(command | wc -l | tr -d '[:space:]')
+```
+
+#### 3. **Permission Issues**
+**Symptoms**: "Permission denied" when running helper script
+```bash
+# Make script executable
+chmod +x ./.claude/adr-helper.sh
+
+# Check current permissions
+ls -la ./.claude/adr-helper.sh
+```
+
+#### 4. **Missing Directories**
+**Symptoms**: "No such file or directory" errors
+```bash
+# Auto-create missing directories
+./.claude/adr-helper.sh validate
+# This will create missing directories automatically in v2.0+
+
+# Manual creation:
+mkdir -p .claude/{branches/{feat,docs,chore,arch},merged,templates}
+```
+
+#### 5. **Template Date Issues**
+**Symptoms**: ADRs show "$(date +%Y-%m-%d)" instead of actual dates
+```bash
+# This indicates template expansion problems
+# Fixed in v2.0+ with proper variable expansion
+
+# Manual fix: Edit the ADR file and replace with current date
+```
+
+### Diagnostic Commands
+
+```bash
+# System health check
+./.claude/adr-helper.sh validate
+
+# Check all file locations
+find .claude -type f -name "*.md" -o -name "*.toml" -o -name "*.sh"
+
+# Verify TOML structure
+grep -E "^\[|^[a-zA-Z].*=" .claude/adr-index.toml
+
+# Check script functionality
+./.claude/adr-helper.sh status-brief
+```
+
+### Recovery Procedures
+
+#### **Corrupted TOML File**
+```bash
+# Check for backup files
+ls -la .claude/adr-index.toml.backup.*
+
+# Restore from backup
+cp .claude/adr-index.toml.backup.TIMESTAMP .claude/adr-index.toml
+
+# Or regenerate (lose current ADR index)
+rm .claude/adr-index.toml
+# Re-run setup with your AI assistant
+```
+
+#### **Missing System Files**
+```bash
+# Re-download main system file
+curl -o .claude/CLAUDE-CONTEXT-SYSTEM.md \
+  https://raw.githubusercontent.com/joshrotenberg/claude-context-system/main/CLAUDE-CONTEXT-SYSTEM.md
+
+# Regenerate helper script
+# Ask your AI assistant: "Regenerate the adr-helper.sh script from the system documentation"
+```
+
+#### **Complete System Reset**
+```bash
+# Backup existing ADRs
+tar -czf claude-backup-$(date +%s).tar.gz .claude/branches/
+
+# Remove and regenerate system
+rm -rf .claude
+# Ask your AI assistant: "Set up the Claude Context System from scratch"
+
+# Restore ADRs from backup
+tar -xzf claude-backup-*.tar.gz
+```
+
+### Platform-Specific Notes
+
+#### **macOS**
+- Use `brew install bash` for newer bash version if experiencing issues
+- Some `grep` options may behave differently (use GNU grep if needed)
+
+#### **Windows WSL**
+- Ensure line endings are Unix-style (`dos2unix .claude/adr-helper.sh`)
+- Check file permissions in WSL vs Windows filesystem
+
+#### **Linux**
+- Standard bash and GNU tools should work without modification
+- Ensure `find`, `grep`, `wc`, and `date` are available
+
+### Emergency Contacts
+
+#### **When All Else Fails**
+1. **Ask Your AI Assistant**: "Help me debug my Claude Context System setup"
+2. **Check the Canonical Repository**: https://github.com/joshrotenberg/claude-context-system
+3. **Create Minimal Test**: Start fresh in a new directory to isolate issues
+
+#### **Setup Validation Checklist**
+- ✅ `.claude/CLAUDE-CONTEXT-SYSTEM.md` exists and is readable
+- ✅ `.claude/adr-index.toml` exists and passes TOML validation
+- ✅ `.claude/adr-helper.sh` exists and is executable
+- ✅ Required directories exist: `branches/{feat,arch,docs,chore}`, `merged`, `templates`
+- ✅ Helper script commands work: `status`, `validate`, `list`
+- ✅ ADR creation works: `new feat "test-decision"`
+
+**If any checklist item fails, use the recovery procedures above.**
+
+## 🔄 Update Process Best Practices
+
+**For AI assistants and users updating existing Claude Context System installations:**
+
+### Pre-Update Safety Checklist
+
+```bash
+# 1. Create backup before any modifications
+tar -czf claude-backup-$(date +%s).tar.gz .claude/
+
+# 2. Validate current system health
+./.claude/adr-helper.sh validate
+
+# 3. Check syntax before deploying new scripts
+bash -n .claude/adr-helper.sh
+
+# 4. Document current version for rollback reference
+grep "version.*=" .claude/adr-index.toml
+```
+
+### Optimal Update Sequence
+
+**Follow this order to minimize conflicts and ensure data preservation:**
+
+1. **Documentation First**: Update `CLAUDE-CONTEXT-SYSTEM.md`
+2. **Configuration Second**: Update `adr-index.toml` structure and settings
+3. **Scripts Third**: Update `adr-helper.sh` with new functionality
+4. **Validation Last**: Run comprehensive validation and testing
+
+### Update Failure Recovery
+
+```bash
+# If update fails mid-process:
+# 1. Restore from backup
+tar -xzf claude-backup-*.tar.gz
+
+# 2. Validate restored system
+./.claude/adr-helper.sh validate
+
+# 3. Identify the failure point and fix before retrying
+```
+
+### Large File Edit Safety
+
+**For major file replacements (>500 lines):**
+- Break into smaller, testable chunks when possible
+- Verify file completeness after each edit
+- Test functionality immediately after script changes
+- Use `bash -n filename` to check syntax before execution
+
+### Version Compatibility Notes
+
+- **v1.0 → v2.0**: Full backward compatibility, zero data loss expected
+- **Always preserve existing ADRs**: Structure changes should maintain all decision content
+- **Test new features incrementally**: Validate each new capability before relying on it
 
 # 🔐 Authorization Configuration
 [permissions]

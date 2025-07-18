@@ -145,24 +145,7 @@ common_tags = [
 "update-report-improvements" = { file = "chore/update-report-improvements.md", status = "proposed", created = "2025-07-18" }
 "fix-toml-structure-issues" = { file = "chore/fix-toml-structure-issues.md", status = "proposed", created = "2025-07-18" }
 "bash-script-reliability-improvements" = { file = "chore/bash-script-reliability-improvements.md", status = "proposed", created = "2025-07-18" }
-"update-process-improvements" = { file = "chore/update-process-improvements.md", status = "proposed", created = "2025-07-18" }
-"readme-restructure" = { file = "chore/docs/readme-restructure.md", status = "proposed", created = "2025-07-18", component = "docs" }
-
-[active.feat]
-"v1-public-release-readiness" = { file = "feat/v1-public-release-readiness.md", status = "proposed", created = "2025-07-18" }
-"dogfood-our-own-system" = { file = "feat/dogfood-our-own-system.md", status = "proposed", created = "2025-07-18" }
-"context-ingestion-speed-test" = { file = "feat/context-ingestion-speed-test.md", status = "proposed", created = "2025-07-18" }
-"conventional-branching-components" = { file = "feat/conventional-branching-components.md", status = "proposed", created = "2025-07-18" }
-"test-troubleshooting-improvements" = { file = "feat/test-troubleshooting-improvements.md", status = "proposed", created = "2025-07-18" }
-"oauth-integration" = { file = "feat/auth/oauth-integration.md", status = "proposed", created = "2025-07-18", component = "auth" }
-
-[active.docs]
-"github-as-canonical-location" = { file = "docs/github-as-canonical-location.md", status = "proposed", created = "2025-07-18" }
-"ai-assistant-quick-start" = { file = "docs/ai-assistant-quick-start.md", status = "proposed", created = "2025-07-18" }
-"ai-date-awareness-requirement" = { file = "docs/ai-date-awareness-requirement.md", status = "proposed", created = "2025-07-18" }
 "setup-troubleshooting-guide" = { file = "docs/setup-troubleshooting-guide.md", status = "proposed", created = "2025-07-18" }
+"test-troubleshooting-improvements" = { file = "feat/test-troubleshooting-improvements.md", status = "proposed", created = "2025-07-18" }
 "comprehensive-system-improvements" = { file = "docs/comprehensive-system-improvements.md", status = "proposed", created = "2025-07-18" }
-
-[active.arch]
-"microservices-decision" = { file = "arch/microservices-decision.md", status = "proposed", created = "2025-07-18" }
-"real-world-feedback-integration" = { file = "arch/real-world-feedback-integration.md", status = "proposed", created = "2025-07-18" }
+"update-process-improvements" = { file = "chore/update-process-improvements.md", status = "proposed", created = "2025-07-18" }
