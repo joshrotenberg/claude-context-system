@@ -138,3 +138,4 @@ common_tags = [
 "dogfood-our-own-system" = { file = "feat/dogfood-our-own-system.md", status = "proposed", created = "2025-07-18" }
 "github-as-canonical-location" = { file = "docs/github-as-canonical-location.md", status = "proposed", created = "2025-07-18" }
 "branch-and-pr-workflow" = { file = "chore/branch-and-pr-workflow.md", status = "proposed", created = "2025-07-18" }
+"permission-violation-incident-response" = { file = "docs/permission-violation-incident-response.md", status = "proposed", created = "2025-07-18" }

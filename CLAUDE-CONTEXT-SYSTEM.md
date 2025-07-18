@@ -198,6 +198,43 @@ This creates a decision management system that's both lightweight and powerful -
 
 **Never assume dates - always check current date first!**
 
+## 🛡️ AI Assistant Permission Guidelines
+
+**CRITICAL: Always check permissions before any git/GitHub operation**
+
+### Mandatory Permission Check Process
+1. **Before ANY operation** - call permission checking function
+2. **Read permission setting** from `.claude/adr-index.toml`
+3. **Respect "never" settings** - do not proceed or ask
+4. **Ask for "ask" settings** - get explicit user confirmation
+5. **Proceed for "yes" settings** - but inform user what you're doing
+
+### Permission Request Best Practices
+- **Limit to 1-2 requests at a time** - avoid overwhelming user
+- **Group related operations** in single prompt when logical
+- **Provide clear context** about what operation will do
+- **Remember session choices** to reduce repeated asking
+- **Fail safe** - when unclear, ask permission
+
+### Sample Permission Check
+```
+"I need to push this branch to GitHub. Your settings show:
+auto_push = 'ask' 
+
+This will upload the branch with 3 commits to the remote repository.
+Proceed? (y/N)"
+```
+
+### When You Violate Permissions
+If you accidentally perform an operation without checking:
+1. **Immediately acknowledge** the violation
+2. **Explain what happened** and what should have been checked
+3. **Ask if the action should be reversed** if possible
+4. **Create an ADR** documenting the incident if significant
+
+### User Permission Reference
+**Remind users**: "You can ask me 'what permissions are configured?' or 'what can you do automatically?' at any time."
+
 ## Quick Reference Card
 
 ### Essential Commands

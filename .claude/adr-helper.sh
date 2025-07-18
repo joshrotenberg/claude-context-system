@@ -13,6 +13,61 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Permission checking function
+check_permission() {
+    local operation="$1"
+    local permission_key="$2"
+    local default="${3:-ask}"
+
+    if [[ ! -f "$INDEX_FILE" ]]; then
+        echo -e "${YELLOW}Warning: No ADR index found. Using safe defaults.${NC}"
+        permission="ask"
+    else
+        # Extract permission from TOML (simplified parsing)
+        permission=$(grep "^$permission_key" "$INDEX_FILE" | cut -d'"' -f2 2>/dev/null || echo "$default")
+    fi
+
+    case "$permission" in
+        "yes")
+            echo -e "${GREEN}✓ Auto-approved: $operation${NC}"
+            return 0
+            ;;
+        "never")
+            echo -e "${RED}✗ Operation disabled: $operation${NC}"
+            echo "  Permission setting: $permission_key = \"never\""
+            echo "  To enable, change setting in $INDEX_FILE"
+            return 1
+            ;;
+        "ask"|*)
+            echo -e "${YELLOW}🤔 Permission request: $operation${NC}"
+            echo "  Setting: $permission_key = \"$permission\""
+            read -p "Proceed? (y/N): " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                return 0
+            else
+                echo -e "${BLUE}👍 Operation cancelled by user${NC}"
+                return 1
+            fi
+            ;;
+    esac
+}
+
+# GitHub operation wrapper with permission checking
+safe_gh_operation() {
+    local operation="$1"
+    local permission_key="$2"
+    shift 2
+
+    if check_permission "$operation" "$permission_key"; then
+        echo -e "${BLUE}🚀 Executing: $operation${NC}"
+        "$@"
+    else
+        echo -e "${YELLOW}⏭️  Skipped: $operation${NC}"
+        return 1
+    fi
+}
+
 # Ensure we're in a project with the system
 if [[ ! -f "$INDEX_FILE" ]]; then
     echo -e "${RED}ERROR: No ADR index found. Run this from a project with Claude Context System.${NC}"
