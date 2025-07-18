@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.3](https://github.com/joshrotenberg/claude-context-system/compare/claude-context-system-v0.1.2...claude-context-system-v0.1.3) (2025-07-18)
+
+
+### Features
+
+* AI assistant optimization with conventional branching components ([#7](https://github.com/joshrotenberg/claude-context-system/issues/7)) ([b6c8692](https://github.com/joshrotenberg/claude-context-system/commit/b6c8692d31a10af19e43f66d51cf4c5d048a25ef))
+
+
+### Miscellaneous
+
+* replace outdated gist links with raw github content URLs ([#6](https://github.com/joshrotenberg/claude-context-system/issues/6)) ([9ad4572](https://github.com/joshrotenberg/claude-context-system/commit/9ad4572256dd262a90f795ec29140c30d3abe546))
+
 ## [0.1.2](https://github.com/joshrotenberg/claude-context-system/compare/claude-context-system-v0.1.1...claude-context-system-v0.1.2) (2025-07-18)
 
 
