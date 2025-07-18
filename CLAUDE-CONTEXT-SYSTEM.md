@@ -1,6 +1,25 @@
 # Claude Context System: Complete Setup & Guide
 
-**A self-contained system for maintaining project context, architectural decisions, and AI assistant continuity.**
+**A self-contained, AI-managed system for maintaining project context and architectural decisions. You focus on coding, your AI assistant handles the rest.**
+
+## 🎯 The Promise: AI Does the Work, You Stay Focused
+
+**For Developers:**
+- Write code and make decisions normally
+- Your AI assistant automatically tracks everything
+- Never lose context between sessions
+- Skip documentation busywork
+
+**For AI Assistants:**
+- Complete project context in every session
+- Architectural decision history and reasoning
+- Current work status and priorities
+- Permission-aware automation
+
+**For Teams:**
+- Shared understanding across all sessions
+- Safe collaboration without workflow disruption
+- Decision traceability without overhead
 
 ## 🔄 Canonical Reference & Updates
 
@@ -26,7 +45,7 @@ and present a summary of new or changed functionality. Ask if I want to implemen
 - **Last local update**: 2025-07-18
 - **Next recommended check**: 2025-08-18
 
-## Why Your Team Needs This (2-Minute Pitch)
+## The Problem This Solves (2-Minute Pitch)
 
 ### The Problem We're Solving
 
@@ -81,6 +100,28 @@ Add a reminder to check for system updates:
 for updates next month and implement any improvements."
 ```
 
+## 🚀 You're Looking at an AI-First System
+
+**IMPORTANT: This document looks comprehensive because your AI assistant manages all of it.** You don't need to learn or maintain any of this manually.
+
+### How It Actually Works:
+1. **You:** "Let's use PostgreSQL instead of Redis for caching"
+2. **AI:** Creates ADR, updates context, tracks implementation  
+3. **You:** Keep coding while AI handles documentation
+
+### Three Weeks Later:
+1. **You:** "Why did we choose PostgreSQL for caching?"
+2. **AI:** "ADR #7 from Jan 15th: Redis caused memory issues in production, PostgreSQL provides ACID guarantees we needed for transaction caching"
+3. **You:** Get answer instantly, keep working
+
+### The Files Are Human-Readable But AI-Managed
+- **Markdown/TOML** format so you CAN read them
+- **AI assistant** maintains them so you DON'T HAVE TO
+- **Git-friendly** so teams can collaborate
+- **Zero external dependencies** so it works everywhere
+
+**The rest of this document is your AI assistant's manual, not yours.**
+
 ## Built on Proven Foundations
 
 This system combines two foundational practices in modern software development:
@@ -105,6 +146,18 @@ We've merged these practices into something new:
 This creates a decision management system that's both lightweight and powerful - perfect for teams using AI assistants in their development workflow.
 
 **Credits**: Huge thanks to Michael Nygard for ADRs and the Conventional Commits community for commit standardization. This system builds on their foundational work.
+
+## 🗓️ CRITICAL: AI Assistant Date Awareness
+
+**AI Assistant: ALWAYS start every session with:**
+
+1. **Check current date first** - Never assume dates
+2. Read `.claude/adr-index.toml` [updates] section  
+3. Compare current date with `next_due_*` fields
+4. Alert user to any overdue maintenance
+5. Provide context update if due
+
+**Never assume dates - always check current date first!**
 
 ## Quick Reference Card
 
@@ -1112,11 +1165,28 @@ created = "2025-07-18"
 team_size = "medium"                     # Options: "small", "medium", "large"
 primary_users = ["user@company.com"]     # Who actively uses the system
 
-# Update configuration
+# Update configuration - Simple per-item frequencies  
 [updates]
-frequency = "monthly"                    # Options: "never", "quarterly", "monthly", "weekly", "daily"
-last_check = "2025-07-18"
-next_check = "2025-08-18"
+system = "monthly"              # Check canonical gist for system updates
+permissions = "quarterly"       # Review authorization settings  
+team_config = "quarterly"       # Review team/collaboration settings
+adr_maintenance = "weekly"      # ADR cleanup, archiving, status updates
+context = "daily"               # Current project status, active branches, priorities
+
+# Last check tracking (ISO 8601 format - AI updates these)
+last_check_system = "2025-01-15"
+last_check_permissions = "2025-01-15" 
+last_check_team_config = "2025-01-15"
+last_check_adr_maintenance = "2025-01-13"
+last_check_context = "2025-01-17"
+
+# Next due dates (calculated automatically)
+next_due_system = "2025-02-15"        # +1 month
+next_due_permissions = "2025-04-15"   # +3 months  
+next_due_team_config = "2025-04-15"   # +3 months
+next_due_adr_maintenance = "2025-01-20" # +1 week
+next_due_context = "2025-01-18"       # +1 day
+
 canonical_url = "https://gist.github.com/joshrotenberg/a9f8ac85b9ebe20c6b6202a17d804fbc"
 
 # 🔐 Authorization Configuration
@@ -1261,15 +1331,23 @@ When asked to check for updates:
 ### Starting a New AI Session
 
 ```
-I'm working on [project-name] which uses the Claude Context System v2.0.
-Please start by reading:
-1. .claude/adr-index.toml - for decision history and authorization settings
-2. .claude/branches/feat/*.md - for recent decisions
-3. .claude/docs/project-context.md - for current project state
-4. README.md - for project overview
+Starting session for [project]. Please:
+
+1. **Check current date first** (what is today's date?)
+2. Read .claude/adr-index.toml [updates] section  
+3. Compare current date with next_due_* fields
+4. Show me any overdue maintenance:
+   - System updates overdue?
+   - Permission review overdue? 
+   - ADR maintenance overdue?
+   - Context update overdue?
+5. If context update is due/overdue, give me current project status
+6. Update last_check_* dates for completed items
 
 Authorization level: [check my permissions for git/GitHub operations]
 Team environment: [check if passive_mode is enabled]
+
+Then let's start today's work with current context.
 Current focus: [specific area/feature]
 Open questions: [list any pending decisions]
 
@@ -1491,6 +1569,8 @@ The external change detection automatically scans for new branches and commits b
 -  AI assistants consistently reference ADRs
 
 ## Troubleshooting
+
+**Remember: Your AI assistant should handle most maintenance automatically. If you're manually debugging TOML files or running complex commands, ask your AI to help instead.**
 
 ### Common Issues
 
