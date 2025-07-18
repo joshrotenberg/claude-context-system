@@ -6,6 +6,9 @@
 
 **If you're an AI assistant getting oriented on this project for the first time, follow this sequence:**
 
+### 0. Check Current Date First
+**IMPORTANT**: Always check the current date before proceeding. Use your date/time tool to get accurate timestamps for any work.
+
 ### 1. Essential Context (Read First)
 - **Current Status**: v1.0 public release ready after 2+ years of development
 - **Project Purpose**: Self-contained system for AI-managed architectural decision tracking
@@ -30,6 +33,7 @@
 - **Active Work**: Optimizing AI assistant onboarding and user experience
 - **Permission Model**: Three-tier system (never/ask/yes) for team safety
 - **Distribution**: Raw GitHub content (no longer using Gist)
+- **Date Awareness**: Always verify current date before creating timestamps or ADRs
 
 **Quick Command**: To see all recent decisions: `find .claude/branches -name "*.md" -exec basename {} \; | sort`
 
