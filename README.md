@@ -37,8 +37,8 @@ This repository uses the Claude Context System to manage its own development! Ex
 ## 💡 Why This Works
 
 **Built on proven foundations:**
-- Architectural Decision Records (ADRs) - Introduced by Michael Nygard, battle-tested
-- Conventional Commits - Standardized git workflow 
+- [Architectural Decision Records (ADRs)](https://adr.github.io/) - Introduced by Michael Nygard, battle-tested
+- [Conventional Commits](https://www.conventionalcommits.org/) - Standardized git workflow 
 - AI-first design - Leverages assistants you're already using
 
 **Key innovations:**
