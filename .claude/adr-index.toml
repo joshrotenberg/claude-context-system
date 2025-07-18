@@ -167,3 +167,4 @@ common_tags = [
 "microservices-decision" = { file = "arch/microservices-decision.md", status = "proposed", created = "2025-07-18" }
 "real-world-feedback-integration" = { file = "arch/real-world-feedback-integration.md", status = "proposed", created = "2025-07-18" }
 "ai-assistant-context-priorities" = { file = "docs/ai-assistant-context-priorities.md", status = "proposed", created = "2025-07-18" }
+"conventional-pr-titles" = { file = "chore/conventional-pr-titles.md", status = "proposed", created = "2025-07-18" }
