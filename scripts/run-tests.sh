@@ -101,7 +101,11 @@ lint_shell_scripts() {
         return 0
     fi
 
+    log_info "DEBUG: About to start for loop"
+    log_info "DEBUG: Array contents: ${scripts[*]}"
+
     for script in "${scripts[@]}"; do
+        log_info "DEBUG: Starting iteration for script: $script"
         ((script_count++))
         log_info "Checking $(basename "$script")..."
         log_info "DEBUG: Full path: $script"
