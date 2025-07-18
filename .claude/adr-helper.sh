@@ -43,15 +43,17 @@ validate_toml() {
 backup_toml() {
     local file="$1"
     if [[ -f "$file" ]]; then
-        cp "$file" "$file.backup.$(date +%s)"
+        mkdir -p "$CLAUDE_DIR/backups"
+        cp "$file" "$CLAUDE_DIR/backups/adr-index.toml.backup.$(date +%s)"
         echo -e "${BLUE}📋 Created backup of index file${NC}"
     fi
 }
 
 # Create full system backup before major operations
 backup_system() {
-    local backup_name="claude-backup-$(date +%s).tar.gz"
-    if tar -czf "$backup_name" .claude/ 2>/dev/null; then
+    mkdir -p .claude/backups
+    local backup_name=".claude/backups/system-backup-$(date +%s).tar.gz"
+    if tar -czf "$backup_name" .claude/ --exclude='.claude/backups' 2>/dev/null; then
         echo -e "${GREEN}✅ Created full system backup: $backup_name${NC}"
         return 0
     else
@@ -62,11 +64,14 @@ backup_system() {
 
 # Restore from most recent backup
 restore_system() {
-    local latest_backup=$(ls -t claude-backup-*.tar.gz 2>/dev/null | head -1)
+    local latest_backup=$(ls -t .claude/backups/system-backup-*.tar.gz 2>/dev/null | head -1)
     if [[ -n "$latest_backup" ]]; then
         echo -e "${YELLOW}🔄 Restoring from backup: $latest_backup${NC}"
+        local temp_dir=$(mktemp -d)
+        tar -xzf "$latest_backup" -C "$temp_dir"
         rm -rf .claude/
-        tar -xzf "$latest_backup"
+        mv "$temp_dir/.claude" .
+        rmdir "$temp_dir"
         echo -e "${GREEN}✅ System restored from backup${NC}"
         return 0
     else
@@ -215,7 +220,7 @@ EOF
     else
         echo -e "${RED}ERROR: TOML validation failed after update. Restoring backup.${NC}"
         # Restore from backup if validation fails
-        local latest_backup=$(ls -t "$INDEX_FILE.backup."* 2>/dev/null | head -1)
+        local latest_backup=$(ls -t "$CLAUDE_DIR/backups/adr-index.toml.backup."* 2>/dev/null | head -1)
         if [[ -n "$latest_backup" ]]; then
             cp "$latest_backup" "$INDEX_FILE"
             echo -e "${YELLOW}Restored from backup: $latest_backup${NC}"
