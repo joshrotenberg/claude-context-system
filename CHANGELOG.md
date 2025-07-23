@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/joshrotenberg/claude-context-system/compare/claude-context-system-v0.1.4...claude-context-system-v0.1.5) (2025-07-23)
+
+
+### Features
+
+* Implement SESSION-CONTEXT Pattern for Enhanced Session Management ([#11](https://github.com/joshrotenberg/claude-context-system/issues/11)) ([81b6340](https://github.com/joshrotenberg/claude-context-system/commit/81b634097ade8ee05f23cbd63526f55412920fd5))
+
 ## [0.1.4](https://github.com/joshrotenberg/claude-context-system/compare/claude-context-system-v0.1.3...claude-context-system-v0.1.4) (2025-07-18)
 
 
