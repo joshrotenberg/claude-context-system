@@ -7,12 +7,13 @@
 - **Developers:** Write code and make decisions normally - your AI tracks everything automatically
 - **AI Assistants:** Get complete project context in every session with decision history and reasoning  
 - **Teams:** Share understanding across all sessions without workflow disruption
+- **Session Management:** Optional SESSION-CONTEXT pattern for daily context and seamless handoffs
 
 ## 🚀 Quick Start (2 Minutes)
 
 1. **Copy the system:** Download `CLAUDE-CONTEXT-SYSTEM.md` 
 2. **Place in your project:** Save as `.claude/CLAUDE-CONTEXT-SYSTEM.md`
-3. **Tell your AI:** "Please read `.claude/CLAUDE-CONTEXT-SYSTEM.md` and set up the complete system"
+3. **Tell your AI:** "Please read `.claude/CLAUDE-CONTEXT-SYSTEM.md` and set up the complete system with SESSION-CONTEXT.md for daily context management"
 4. **Make decisions:** Your AI automatically captures architectural choices as you work
 
 That's it! No installation, no dependencies, just natural conversation with your AI assistant.
@@ -44,6 +45,7 @@ This repository uses the Claude Context System to manage its own development! Ex
 **Key innovations:**
 - Single self-contained file - Zero setup friction
 - AI-managed maintenance - You focus on decisions, not documentation
+- SESSION-CONTEXT pattern - Daily context management and seamless session handoffs
 - Permission-aware automation - Safe for team repositories
 - Git-native workflow - Works with existing development processes
 
@@ -66,6 +68,7 @@ This repository uses the Claude Context System to manage its own development! Ex
 - **Zero dependencies** - Just markdown and TOML files
 - **Works with any AI** - Claude, GPT-4, Gemini, or others
 - **Self-validating** - Built-in health checks and troubleshooting
+- **Session management** - Optional daily context pattern for team continuity
 - **Configurable maintenance** - Set update frequencies per team needs
 - **Complete workflow** - From decision to documentation to team sharing
 
@@ -78,7 +81,7 @@ This repository uses the Claude Context System to manage its own development! Ex
 
 ## 🎯 Success Stories
 
-> "Our team adopted this after losing 3 days to 'why did we choose Kubernetes over ECS?' - nobody remembered the trade-offs. Now every decision is captured automatically. A new developer understood our entire architecture history in 15 minutes." - Engineering Team Lead
+> "Our team adopted this after losing 3 days to 'why did we choose Kubernetes over ECS?' - nobody remembered the trade-offs. Now every decision is captured automatically. The SESSION-CONTEXT pattern means perfect handoffs between sessions. A new developer understood our entire architecture history in 15 minutes." - Engineering Team Lead
 
 ## 🤝 Contributing
 
