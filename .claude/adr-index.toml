@@ -126,29 +126,10 @@ common_tags = [
     "enhanced-tooling",
 ]
 
-[active.arch]
-"single-file-approach" = { file = "arch/single-file-approach.md", status = "proposed", created = "2025-07-18" }
-
-
 [active.feat]
 "ai-first-messaging" = { file = "feat/ai-first-messaging.md", status = "proposed", created = "2025-07-18" }
-"v1-public-release-readiness" = { file = "feat/v1-public-release-readiness.md", status = "proposed", created = "2025-07-18" }
-"dogfood-our-own-system" = { file = "feat/dogfood-our-own-system.md", status = "proposed", created = "2025-07-18" }
+"session-context-pattern" = { file = "feat/session-context-pattern.md", status = "proposed", created = "2025-07-22" }
 
-[active.docs]
-"team-permission-model" = { file = "docs/team-permission-model.md", status = "proposed", created = "2025-07-18" }
-"github-as-canonical-location" = { file = "docs/github-as-canonical-location.md", status = "proposed", created = "2025-07-18" }
-
-[active.chore]
-"configurable-update-frequencies" = { file = "chore/configurable-update-frequencies.md", status = "proposed", created = "2025-07-18" }
-"branch-and-pr-workflow" = { file = "chore/branch-and-pr-workflow.md", status = "proposed", created = "2025-07-18" }
-"update-report-improvements" = { file = "chore/update-report-improvements.md", status = "proposed", created = "2025-07-18" }
-"fix-toml-structure-issues" = { file = "chore/fix-toml-structure-issues.md", status = "proposed", created = "2025-07-18" }
-"bash-script-reliability-improvements" = { file = "chore/bash-script-reliability-improvements.md", status = "proposed", created = "2025-07-18" }
-"update-process-improvements" = { file = "chore/update-process-improvements.md", status = "proposed", created = "2025-07-18" }
-"readme-restructure" = { file = "chore/docs/readme-restructure.md", status = "proposed", created = "2025-07-18", component = "docs" }
-
-[active.feat]
 "v1-public-release-readiness" = { file = "feat/v1-public-release-readiness.md", status = "proposed", created = "2025-07-18" }
 "dogfood-our-own-system" = { file = "feat/dogfood-our-own-system.md", status = "proposed", created = "2025-07-18" }
 "context-ingestion-speed-test" = { file = "feat/context-ingestion-speed-test.md", status = "proposed", created = "2025-07-18" }
@@ -162,10 +143,20 @@ common_tags = [
 "ai-date-awareness-requirement" = { file = "docs/ai-date-awareness-requirement.md", status = "proposed", created = "2025-07-18" }
 "setup-troubleshooting-guide" = { file = "docs/setup-troubleshooting-guide.md", status = "proposed", created = "2025-07-18" }
 "comprehensive-system-improvements" = { file = "docs/comprehensive-system-improvements.md", status = "proposed", created = "2025-07-18" }
+"ai-assistant-context-priorities" = { file = "docs/ai-assistant-context-priorities.md", status = "proposed", created = "2025-07-18" }
+"branch-based-todo-workflow" = { file = "docs/branch-based-todo-workflow.md", status = "proposed", created = "2025-07-18" }
 
 [active.arch]
+"single-file-approach" = { file = "arch/single-file-approach.md", status = "proposed", created = "2025-07-18" }
 "microservices-decision" = { file = "arch/microservices-decision.md", status = "proposed", created = "2025-07-18" }
 "real-world-feedback-integration" = { file = "arch/real-world-feedback-integration.md", status = "proposed", created = "2025-07-18" }
-"ai-assistant-context-priorities" = { file = "docs/ai-assistant-context-priorities.md", status = "proposed", created = "2025-07-18" }
+
+[active.chore]
+"configurable-update-frequencies" = { file = "chore/configurable-update-frequencies.md", status = "proposed", created = "2025-07-18" }
+"branch-and-pr-workflow" = { file = "chore/branch-and-pr-workflow.md", status = "proposed", created = "2025-07-18" }
+"update-report-improvements" = { file = "chore/update-report-improvements.md", status = "proposed", created = "2025-07-18" }
+"fix-toml-structure-issues" = { file = "chore/fix-toml-structure-issues.md", status = "proposed", created = "2025-07-18" }
+"bash-script-reliability-improvements" = { file = "chore/bash-script-reliability-improvements.md", status = "proposed", created = "2025-07-18" }
+"update-process-improvements" = { file = "chore/update-process-improvements.md", status = "proposed", created = "2025-07-18" }
+"readme-restructure" = { file = "chore/docs/readme-restructure.md", status = "proposed", created = "2025-07-18", component = "docs" }
 "conventional-pr-titles" = { file = "chore/conventional-pr-titles.md", status = "proposed", created = "2025-07-18" }
-"branch-based-todo-workflow" = { file = "docs/branch-based-todo-workflow.md", status = "proposed", created = "2025-07-18" }
